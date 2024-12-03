@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
-                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerState.is_locked ? '' : 'locked']">
+                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerState.is_locked ? '' : 'locked']" @click="pressButton">
                             <span>BUZZ</span>
                         </button>
                     </div>
@@ -88,12 +88,31 @@ const getStudents = async () => {
         console.error('Error fetching students:', error.message);
     }
 };
+
+const pressButton = async () => {
+    const userId = sessionStorage.getItem('userId'); // Retrieve the user ID from sessionStorage
+    if (!userId) {
+        console.error('User ID not found in sessionStorage');
+        return;
+    }
+
+    try {
+        const response = await axios.post(`/press`, {
+            user_id: parseInt(userId)
+        });
+        console.log('Button pressed:', response.data);
+    } catch (error) {
+        console.error('Error pressing button:', error.message);
+    }
+};
+
 const startSpin = () => {
     spinIcon.value = true;
     setTimeout(() => {
         spinIcon.value = false; // Reset spin after animation completes
     }, 1000); // Match the duration of the animation (1 second)
 };
+
 const getBuzzerState = async () => {
     try {
         const response = await axios.get(`/buzzer-state`);

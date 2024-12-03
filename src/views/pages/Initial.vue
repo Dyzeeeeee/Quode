@@ -152,6 +152,9 @@ const handleJoin = async () => {
         const response = await axios.post('/create', userData);
         console.log('User added successfully:', response.data);
 
+        // Store the user ID in sessionStorage
+        sessionStorage.setItem('userId', response.data.id); // Store the ID in sessionStorage
+
         // Navigate to /buzzer after successful response
         router.push(`/buzzer/${userData.section}`);
     } catch (error) {
