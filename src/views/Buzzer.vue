@@ -78,9 +78,9 @@ const spinIcon = ref(false);
 
 
 const role = ref('');
-onMounted(async () => {
-    await getBuzzerState();
-    await getStudents();
+onMounted(() => {
+    getBuzzerState();
+    getStudents();
 
     role.value = sessionStorage.getItem('role');
 
