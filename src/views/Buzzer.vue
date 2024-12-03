@@ -80,7 +80,6 @@ const getBuzzerState = async () => {
 
 const spinIcon = ref(false);
 
-
 const role = ref('');
 
 onMounted(() => {
@@ -94,13 +93,27 @@ onMounted(() => {
         cluster: 'ap1'
     });
 
-    // Subscribe to the channel and listen for events
-    const channel = pusher.subscribe('buzzer-channel');
-    channel.bind('buzzer-pressed', (data) => {
-        console.log('Real-time event received:', data);
+    // Subscribe to the primary buzzer channel
+    const buzzerChannel = pusher.subscribe('buzzer-channel');
+    buzzerChannel.bind('buzzer-pressed', (data) => {
+        console.log('Buzzer pressed event:', data);
         getStudents(); // Refresh students list
         getBuzzerState(); // Refresh buzzer state
         startSpin(); // Trigger animation or update UI
+    });
+
+    buzzerChannel.bind('buzzer-reset', (data) => {
+        console.log('Buzzer reset event:', data);
+        getStudents();
+        getBuzzerState();
+    });
+
+    // Subscribe to the new additional channel
+    const newChannel = pusher.subscribe('additional-channel');
+    newChannel.bind('buzzer-reset', (data) => {
+        console.log('Additional channel event received:', data);
+        getStudents();
+        getBuzzerState();
     });
 });
 
@@ -108,6 +121,7 @@ const handleLeave = async () => {
     router.push('/');
 };
 </script>
+
 
 <template>
     <div class="flex flex-col items-center justify-center min-h-screen bg-black">
