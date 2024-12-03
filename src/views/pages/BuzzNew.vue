@@ -3,8 +3,6 @@ import { ref, watchEffect, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { Pusher } from 'pusher-js';
-
 const route = useRoute();
 
 const router = useRouter();
@@ -65,20 +63,6 @@ const spinIcon = ref(false);
 onMounted(() => {
     getStudents();
     getBuzzerState();
-
-    // Initialize Pusher
-    const pusher = new Pusher('your-pusher-key', {
-        cluster: 'your-cluster'
-    });
-
-    // Subscribe to the channel and listen for events
-    const channel = pusher.subscribe('buzzer-channel');
-    channel.bind('buzzer-pressed', (data) => {
-        console.log('Real-time event received:', data);
-        getStudents(); // Refresh students list
-        getBuzzerState(); // Refresh buzzer state
-        startSpin(); // Trigger animation or update UI
-    });
 });
 
 const handleLeave = async () => {
