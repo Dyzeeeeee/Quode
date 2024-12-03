@@ -1,7 +1,13 @@
-<script setup></script>
+<script setup>
+  // Your script setup code here
+</script>
 
 <template>
+  <div>
     <router-view />
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+  /* Your scoped styles here */
+</style>
