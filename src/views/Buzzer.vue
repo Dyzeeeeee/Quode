@@ -5,6 +5,10 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import Pusher from 'pusher-js';
 
+const userData = JSON.parse(sessionStorage.getItem('userData'));
+const currentUserName = userData ? userData.name : null;
+
+console.log(currentUserName);  // Outputs the name of the user, or null if not found
 const route = useRoute();
 const point = ref(1);
 const router = useRouter();
@@ -78,6 +82,7 @@ const spinIcon = ref(false);
 
 
 const role = ref('');
+
 onMounted(() => {
     getBuzzerState();
     getStudents();
@@ -149,11 +154,13 @@ const handleLeave = async () => {
                     </div>
                     <div class="flex flex-col gap-2 max-h-[52vh] overflow-y-auto hidden-scrollbar">
                         <div v-for="student in students" :key="student.name"
-                            class="flex gap-3 text-white font-bold text-xl bg-[#295d90] p-2 rounded-lg">
+                            class="flex gap-3 text-white font-bold text-xl bg-[#295d90] p-2 rounded-lg " :class="[student.name === currentUserName ? 'border-emerald-500 border-[3px]' : 'border-[#0ed494]'
+                            ]">
                             <img :src="student.avatar" alt="Student Avatar"
-                                class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
+                                class="w-12 h-12 object-cover rounded-full border-[3px] bg-[#274461]" />
                             <div class="self-center">{{ student.name }}</div>
                         </div>
+
                     </div>
                 </div>
                 <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
@@ -173,10 +180,11 @@ const handleLeave = async () => {
                     <div
                         class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
                         <button
-                            :class="['buzzer-btn h-72 w-72 flex self-center', buzzerState.is_locked ? 'locked' : '']"
+                            :class="['buzzer-btn h-72 w-72 flex self-center', buzzerState.is_locked === '1' ? 'locked' : '']"
                             @click="pressButton">
-                            <span>{{ buzzerState.is_locked ? 'LOCKED' : 'BUZZ' }}</span>
+                            <span>{{ buzzerState.is_locked === '1' ? 'LOCKED' : 'BUZZ' }}</span>
                         </button>
+
 
                         <div v-if="role === 'admin'">
                             <input v-model="point" type="number" placeholder="Point"
