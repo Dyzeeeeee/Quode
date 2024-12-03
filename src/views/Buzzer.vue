@@ -130,17 +130,17 @@ const handleLeave = async () => {
             <source src="@/assets/images/appbg-flip.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
-        <div class="bg-black border-white border-2 flex flex-col w-[80%] h-[80vh] rounded-lg p-4">
+        <div class="bg-black border-white border-2 flex flex-col w-[80%] h-[9   0vh] rounded-lg p-4">
             <div class="flex px-3 pt-2">
                 <div class="flex-1 flex justify-start transform text-red-500 opacity-70">
                     <button
                         class="rounded-lg border-red-500 border-2 w-32 h-12 self-center flex gap-2 items-center justify-center font-bold"
                         @click="handleLeave">
                         <Icon icon="streamline:interface-logout-arrow-exit-frame-leave-logout-rectangle-right" />
-                        <div>Leaves</div>
+                        <div>Leave</div>
                     </button>
                 </div>
-                <div class="flex-1 flex justify-center transform"><img src="@/assets/images/sample-logo.png" alt=""
+                <div class="flex-1 flex justify-center transform opacity-70 self-center"><img src="@/assets/images/QuodE.png" alt=""
                         class="h-20" /></div>
                 <div class="mt-3 flex-1 flex justify-end text-end">
                     <div

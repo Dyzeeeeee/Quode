@@ -5,9 +5,12 @@
             <source src="@/assets/images/appbg.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
+
         <!-- <img src="@/assets/images/appbg.jpg" alt="Background Image" class="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none" /> -->
         <div
             class="p-8 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70">
+            <div class="flex-1 flex justify-center transform opacity-70 self-center"><img
+                    src="@/assets/images/QuodE.png" alt="" class="h-32" /></div>
             <div class="flex flex-col md:flex-row gap-3">
                 <div
                     class="mt-4 flex justify-center relative max-w-full md:max-w-52 max-h-52 rounded-full p-4 bg-[#274461]">
@@ -22,9 +25,11 @@
                         <Icon icon="game-icons:perspective-dice-six-faces-random" height="45" />
                     </button>
                 </div>
+
                 <div class="flex flex-col gap-3 justify-center w-full">
+
                     <div class="w-full">
-                        <div class="text-white text-xl font-bold">Enter your name (or nickname) and section</div>
+                        <div class="text-white text-xl font-bold">Enter your name and section</div>
                     </div>
                     <div class="w-full">
                         <input v-model="name" type="text" placeholder="Your Name"
