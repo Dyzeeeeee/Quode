@@ -6,7 +6,7 @@ import axios from 'axios';
 import Pusher from 'pusher-js';
 
 const route = useRoute();
-
+const point = ref(1);
 const router = useRouter();
 const section = route.params.section; // Access the 'section' parameter from the route
 const students = ref([]);
@@ -18,6 +18,7 @@ const buzzerState = ref({
         avatar: ''
     }
 });
+
 const getStudents = async () => {
     try {
         const response = await axios.get(`/students/section/${section}`);
@@ -44,6 +45,19 @@ const pressButton = async () => {
     }
 };
 
+const awardPoint = async () => {
+    try {
+        const response = await axios.post('/award', {
+            user_id: buzzerState.value.user.id,
+            score: point.value,
+            award: true
+        });
+        console.log('Award points response:', response.data);
+    } catch (error) {
+        console.error('Error awarding points:', error.message);
+    }
+};
+
 const startSpin = () => {
     spinIcon.value = true;
     setTimeout(() => {
@@ -62,9 +76,13 @@ const getBuzzerState = async () => {
 
 const spinIcon = ref(false);
 
-onMounted(() => {
-    getStudents();
-    getBuzzerState();
+
+const role = ref('');
+onMounted(async () => {
+    await getBuzzerState();
+    await getStudents();
+
+    role.value = sessionStorage.getItem('role');
 
     // Initialize Pusher
     const pusher = new Pusher('423a1b2b7b3786d99280', {
@@ -82,38 +100,46 @@ onMounted(() => {
 });
 
 const handleLeave = async () => {
-    router.push('/initial');
+    router.push('/');
 };
 </script>
 
 <template>
     <div class="flex flex-col items-center justify-center min-h-screen bg-black">
-        <video autoplay muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none">
+        <video autoplay muted playsinline
+            class="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none">
             <source src="@/assets/images/appbg-flip.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
         <div class="bg-black border-white border-2 flex flex-col w-[80%] h-[80vh] rounded-lg p-4">
             <div class="flex px-3 pt-2">
                 <div class="flex-1 flex justify-start transform text-red-500 opacity-70">
-                    <button class="rounded-lg border-red-500 border-2 w-32 h-12 self-center flex gap-2 items-center justify-center font-bold" @click="handleLeave">
+                    <button
+                        class="rounded-lg border-red-500 border-2 w-32 h-12 self-center flex gap-2 items-center justify-center font-bold"
+                        @click="handleLeave">
                         <Icon icon="streamline:interface-logout-arrow-exit-frame-leave-logout-rectangle-right" />
-                        <div>Leave</div>
+                        <div>Leaves</div>
                     </button>
                 </div>
-                <div class="flex-1 flex justify-center transform"><img src="@/assets/images/sample-logo.png" alt="" class="h-20" /></div>
+                <div class="flex-1 flex justify-center transform"><img src="@/assets/images/sample-logo.png" alt=""
+                        class="h-20" /></div>
                 <div class="mt-3 flex-1 flex justify-end text-end">
-                    <div class="text-2xl text-[#274461] p-3 rounded-lg w-full transform transition-all duration-150 ease-in-out text-gray-400">
+                    <div
+                        class="text-2xl text-[#274461] p-3 rounded-lg w-full transform transition-all duration-150 ease-in-out text-gray-400">
                         Section: <span class="text-[#0ed494] font-bold"> {{ section }}</span>
                     </div>
                 </div>
             </div>
             <div class="flex h-full gap-3">
-                <div class="p-4 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full">
+                <div
+                    class="p-4 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full">
                     <div class="flex">
                         <div class="flex-1"></div>
                         <div class="flex-1">
-                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENTS</div>
-                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold mb-3">{{ students.length }}/25</div>
+                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENTS
+                            </div>
+                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold mb-3">{{
+                                students.length }}</div>
                         </div>
                         <div class="flex-1 text-white">
                             <button @click="startSpin">
@@ -122,28 +148,45 @@ const handleLeave = async () => {
                         </div>
                     </div>
                     <div class="flex flex-col gap-2 max-h-[52vh] overflow-y-auto hidden-scrollbar">
-                        <div v-for="student in students" :key="student.name" class="flex gap-3 text-white font-bold text-xl bg-[#295d90] p-2 rounded-lg">
-                            <img :src="student.avatar" alt="Student Avatar" class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
+                        <div v-for="student in students" :key="student.name"
+                            class="flex gap-3 text-white font-bold text-xl bg-[#295d90] p-2 rounded-lg">
+                            <img :src="student.avatar" alt="Student Avatar"
+                                class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
                             <div class="self-center">{{ student.name }}</div>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
                     <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
-                        <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENT WHO BUZZED</div>
+                        <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENT WHO
+                            BUZZED</div>
 
                         <!-- Conditionally show the user details if buzzer_state.user.id exists -->
-                        <div v-if="buzzerState.user?.id" class="flex gap-3 text-white font-bold text-xl bg-[#0ed494] p-2 rounded-lg">
-                            <img :src="buzzerState.user.avatar" alt="User Avatar" class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
+                        <div v-if="buzzerState.user?.id"
+                            class="flex gap-3 text-white font-bold text-xl bg-[#0ed494] p-2 rounded-lg">
+                            <img :src="buzzerState.user.avatar" alt="User Avatar"
+                                class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
                             <div class="self-center">{{ buzzerState.user.name }}</div>
                         </div>
                     </div>
 
-                    <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
-                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerState.is_locked ? '' : 'locked']" @click="pressButton">
-                            <span>BUZZ</span>
+                    <div
+                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
+                        <button
+                            :class="['buzzer-btn h-72 w-72 flex self-center', buzzerState.is_locked ? 'locked' : '']"
+                            @click="pressButton">
+                            <span>{{ buzzerState.is_locked ? 'LOCKED' : 'BUZZ' }}</span>
                         </button>
+
+                        <div v-if="role === 'admin'">
+                            <input v-model="point" type="number" placeholder="Point"
+                                class="w-full p-2 border border-gray-300 rounded-md bg-gray-400 bg-opacity-50 font-bold text-white " />
+                            <button @click="awardPoint" class="text-white bg-[#0ed494] rounded-lg p-2 w-full mt-2">
+                                Award
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -152,12 +195,15 @@ const handleLeave = async () => {
 
 <style scoped>
 .hidden-scrollbar {
-    overflow-y: auto; /* Enable scrolling */
-    scrollbar-width: none; /* For Firefox */
+    overflow-y: auto;
+    /* Enable scrolling */
+    scrollbar-width: none;
+    /* For Firefox */
 }
 
 .hidden-scrollbar::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Edge */
+    display: none;
+    /* For Chrome, Safari, and Edge */
 }
 
 .buzzer-btn {
@@ -192,7 +238,8 @@ const handleLeave = async () => {
 }
 
 .buzzer-btn.locked {
-    background: #803434; /* Dimmed color for locked state */
+    background: #803434;
+    /* Dimmed color for locked state */
     cursor: not-allowed;
     opacity: 0.6;
     box-shadow:
@@ -201,7 +248,8 @@ const handleLeave = async () => {
 }
 
 .buzzer-btn.locked span {
-    color: #ccc; /* Faded text for locked state */
+    color: #ccc;
+    /* Faded text for locked state */
     text-transform: uppercase;
 }
 
@@ -213,6 +261,7 @@ const handleLeave = async () => {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
