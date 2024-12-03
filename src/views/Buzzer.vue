@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, watchEffect, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
@@ -120,6 +120,10 @@ onMounted(() => {
 const handleLeave = async () => {
     router.push('/');
 };
+
+const sortedStudents = computed(() => {
+    return [...students.value].sort((a, b) => (a.name === currentUserName ? -1 : 1));
+});
 </script>
 
 
@@ -130,7 +134,7 @@ const handleLeave = async () => {
             <source src="@/assets/images/appbg-flip.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
-        <div class="bg-black border-white border-2 flex flex-col w-[80%] h-[9   0vh] rounded-lg p-4">
+        <div class="bg-black border-white border-2 flex flex-col xl:w-[80%] h-[9   0vh]  w-full rounded-lg p-4">
             <div class="flex px-3 pt-2">
                 <div class="flex-1 flex justify-start transform text-red-500 opacity-70">
                     <button
@@ -140,8 +144,8 @@ const handleLeave = async () => {
                         <div>Leave</div>
                     </button>
                 </div>
-                <div class="flex-1 flex justify-center transform opacity-70 self-center"><img src="@/assets/images/QuodE.png" alt=""
-                        class="h-20" /></div>
+                <div class="flex-1 flex justify-center transform opacity self-center hidden xl:block"><img
+                        src="@/assets/images/QuodE.png" alt="" class="h-20 pb-4" /></div>
                 <div class="mt-3 flex-1 flex justify-end text-end">
                     <div
                         class="text-2xl text-[#274461] p-3 rounded-lg w-full transform transition-all duration-150 ease-in-out text-gray-400">
@@ -151,7 +155,7 @@ const handleLeave = async () => {
             </div>
             <div class="flex h-full gap-3">
                 <div
-                    class="p-4 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full">
+                    class="p-4 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block hidden">
                     <div class="flex">
                         <div class="flex-1"></div>
                         <div class="flex-1">
@@ -167,14 +171,13 @@ const handleLeave = async () => {
                         </div>
                     </div>
                     <div class="flex flex-col gap-2 max-h-[52vh] overflow-y-auto hidden-scrollbar">
-                        <div v-for="student in students" :key="student.name"
-                            class="flex gap-3 text-white font-bold text-xl bg-[#295d90] p-2 rounded-lg " :class="[student.name === currentUserName ? 'border-emerald-500 border-[3px]' : 'border-[#0ed494]'
-                            ]">
+                        <div v-for="student in sortedStudents" :key="student.name"
+                            class="flex gap-3 text-white font-bold text-xl bg-[#295d90] p-2 rounded-lg"
+                            :class="[student.name === currentUserName ? 'border-emerald-500 border-[3px]' : 'border-[#0ed494]']">
                             <img :src="student.avatar" alt="Student Avatar"
                                 class="w-12 h-12 object-cover rounded-full border-[3px] bg-[#274461]" />
                             <div class="self-center">{{ student.name }}</div>
                         </div>
-
                     </div>
                 </div>
                 <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">

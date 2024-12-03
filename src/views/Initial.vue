@@ -9,11 +9,11 @@
         <!-- <img src="@/assets/images/appbg.jpg" alt="Background Image" class="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none" /> -->
         <div
             class="p-8 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70">
-            <div class="flex-1 flex justify-center transform opacity-70 self-center"><img
-                    src="@/assets/images/QuodE.png" alt="" class="h-32" /></div>
+            <div class="flex-1 flex justify-center transform opacity self-center"><img src="@/assets/images/QuodE.png"
+                    alt="" class="xl:h-32 h-24" /></div>
             <div class="flex flex-col md:flex-row gap-3">
                 <div
-                    class="mt-4 flex justify-center relative max-w-full md:max-w-52 max-h-52 rounded-full p-4 bg-[#274461]">
+                    class="mt-4 flex justify-center relative  xl:max-w-52 xl:max-h-52 max-h-40  max-w-40  self-center rounded-full p-4 bg-[#274461]">
                     <img :src="avatarUrl" alt="Random Character"
                         class="w-full h-full object-cover rounded-full border-[#0ed494] border-[5px] bg-[#274461]" />
                     <button @click="toggleMenu"
@@ -58,17 +58,18 @@
         <!-- Avatar Style Selection Modal -->
         <div v-if="isMenuOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div
-                class="bg-[#0ed494] bg-opacity-90 p-6 rounded-lg shadow-lg w-[80vw] sm:w-[95vw] md:w-[80vw] lg:w-[80vw]">
+                class="bg-[#0ed494] bg-opacity-90 p-6 rounded-lg shadow-lg w-[100vw] h-[100vh] sm:w-[95vw] md:w-[80vw] lg:w-[90vw]">
                 <h3 class="text-3xl font-bold mb-4 text-white">Select Avatar Style</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                    <div v-for="(style, key) in AVATAR_STYLES" :key="key" class="flex flex-col items-center">
+                <div
+                    class="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-10 gap-4 lg:gap-2 h-[80vh] overflow-y-auto scrollable">
+                    <div v-for="(style, key) in AVATAR_STYLES" :key="key" class="flex flex-col items-center gap-2">
                         <!-- Avatar Sample Image -->
                         <div @click="selectStyle(style)"
-                            class="justify-center flex flex-col items-center cursor-pointer bg-[#274461] w-40 rounded-lg p-2">
+                            class="justify-center flex flex-col items-center cursor-pointer bg-[#274461] xl:w-40 w-24 h-30 xl:h-auto rounded-lg p-2">
                             <img :src="`https://api.dicebear.com/9.x/${style}/svg?seed=random`" alt="Sample Avatar"
-                                class="w-24 h-24 object-cover rounded-full mb-2" />
+                                class="xl:w-24 xl:h-24 w-16 h-16 object-cover rounded-full mb-2" />
                             <!-- Style Name Button -->
-                            <button class="w-full py-2 text-center text-white rounded-md">
+                            <button class="xl:w-full py-2 text-center text-white rounded-md h-[5rem]">
                                 {{ style.charAt(0).toUpperCase() + style.slice(1) }}
                             </button>
                         </div>
@@ -77,7 +78,6 @@
             </div>
         </div>
     </div>
-    {{ avatarUrl }}
 </template>
 
 <script setup>
@@ -145,9 +145,11 @@ const toggleMenu = () => {
 
 // Set the selected avatar style and close the menu
 const selectStyle = (style) => {
-    selectedStyle.value = style;
-    isMenuOpen.value = false;
+    selectedStyle.value = style;  // Update Vue ref
+    sessionStorage.setItem('selectedStyle', JSON.stringify(style));  // Store in sessionStorage
+    isMenuOpen.value = false;  // Close the menu
 };
+
 
 const handleJoin = async () => {
     const userData = {
@@ -159,7 +161,6 @@ const handleJoin = async () => {
     };
 
     // Save to localStorage
-    localStorage.setItem('userData', JSON.stringify(userData));
 
     // Save to sessionStorage
     sessionStorage.setItem('userData', JSON.stringify(userData));
@@ -181,13 +182,19 @@ const handleJoin = async () => {
 };
 
 onMounted(() => {
-    const storedData = JSON.parse(sessionStorage.getItem('userData')) || JSON.parse(localStorage.getItem('userData'));
+    const storedData = JSON.parse(sessionStorage.getItem('userData'));
     if (storedData) {
         name.value = storedData.name || '';
         selectedOption.value = storedData.section || '';
         selectedStyle.value = storedData.avatarStyle || AVATAR_STYLES.lorelei;
         seeder.value = storedData.seed || '';
         avatarUrl.value = storedData.avatarUrl || '';
+    }
+    if (!selectedStyle.value) {
+        const storedStyle = sessionStorage.getItem('selectedStyle');
+        if (storedStyle) {
+            selectedStyle.value = JSON.parse(storedStyle);
+        }
     }
 });
 </script>
