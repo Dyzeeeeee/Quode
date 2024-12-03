@@ -21,8 +21,18 @@
             </div>
             <div class="flex h-full gap-3">
                 <div class="p-4 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full">
-                    <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENTS</div>
-                    <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold mb-3">{{ students.length }}/25</div>
+                    <div class="flex">
+                        <div class="flex-1"></div>
+                        <div class="flex-1">
+                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENTS</div>
+                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold mb-3">{{ students.length }}/25</div>
+                        </div>
+                        <div class="flex-1 text-white">
+                            <button @click="startSpin">
+                                <Icon icon="tdesign:refresh" height="20" :class="{ spin: spinIcon }" />
+                            </button>
+                        </div>
+                    </div>
                     <div class="flex flex-col gap-2 max-h-[52vh] overflow-y-auto hidden-scrollbar">
                         <div v-for="student in students" :key="student.name" class="flex gap-3 text-white font-bold text-xl bg-[#295d90] p-2 rounded-lg">
                             <img :src="student.avatar" alt="Student Avatar" class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
@@ -33,18 +43,18 @@
                 <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
                     <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
                         <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENT WHO BUZZED</div>
-                        <div class="flex gap-3 text-white font-bold text-xl bg-[#0ed494] p-2 rounded-lg">
-                            <img :src="`https://api.dicebear.com/9.x/dylan/svg?seed=random`" alt="Sample Avatar" class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
-                            <div class="self-center">Dyze</div>
+
+                        <!-- Conditionally show the user details if buzzer_state.user.id exists -->
+                        <div v-if="buzzerState.user?.id" class="flex gap-3 text-white font-bold text-xl bg-[#0ed494] p-2 rounded-lg">
+                            <img :src="buzzerState.user.avatar" alt="User Avatar" class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
+                            <div class="self-center">{{ buzzerState.user.name }}</div>
                         </div>
                     </div>
+
                     <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
-                        <button class="buzzer-btn h-72 w-72 flex self-center">
+                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerState.is_locked ? '' : 'locked']">
                             <span>BUZZ</span>
                         </button>
-                        <!-- <button class="buzzer-btn locked h-72 w-72 flex self-center" disabled>
-                            <span>LOCKED</span>
-                        </button> -->
                     </div>
                 </div>
             </div>
@@ -62,6 +72,14 @@ const route = useRoute();
 const router = useRouter();
 const section = route.params.section; // Access the 'section' parameter from the route
 const students = ref([]);
+const buzzerState = ref({
+    is_locked: false,
+    user: {
+        id: null, // Set to null initially or based on actual state
+        name: '',
+        avatar: ''
+    }
+});
 const getStudents = async () => {
     try {
         const response = await axios.get(`/students/section/${section}`);
@@ -70,9 +88,26 @@ const getStudents = async () => {
         console.error('Error fetching students:', error.message);
     }
 };
+const startSpin = () => {
+    spinIcon.value = true;
+    setTimeout(() => {
+        spinIcon.value = false; // Reset spin after animation completes
+    }, 1000); // Match the duration of the animation (1 second)
+};
+const getBuzzerState = async () => {
+    try {
+        const response = await axios.get(`/buzzer-state`);
+        buzzerState.value = response.data;
+    } catch (error) {
+        console.error('Error fetching students:', error.message);
+    }
+};
+
+const spinIcon = ref(false);
 
 onMounted(() => {
     getStudents();
+    getBuzzerState();
 });
 
 const handleLeave = async () => {
@@ -133,5 +168,18 @@ const handleLeave = async () => {
 .buzzer-btn.locked span {
     color: #ccc; /* Faded text for locked state */
     text-transform: uppercase;
+}
+
+.spin {
+    animation: spin 1s linear;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 </style>
