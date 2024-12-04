@@ -167,7 +167,11 @@ const handleJoin = async () => {
     try {
         const response = await apiServices.login(userData);
         sessionStorage.setItem('role', response.role);
-        router.push({ name: 'buzzer', params: { id: selectedSection.value } });
+        const selectedSectionId = sessionStorage.getItem('selectedSectionId');
+
+        // Navigate to the route using the stored ID
+        router.push({ name: 'buzzer', params: { id: selectedSectionId } });
+
     } catch (error) {
         console.error('Error logging in user:', error.response?.data || error.message);
     }
@@ -191,7 +195,7 @@ const getSectionGrouping = async () => {
 watch(selectedSection, (newSectionId) => {
     const selected = sectionGrouped.value.find(section => section.section_id === newSectionId);
     if (selected) {
-        sessionStorage.setItem('selectedSectionName', selected.section_name);
+        sessionStorage.setItem('selectedSectionId', selected.section_id);
     }
 });
 
