@@ -131,28 +131,25 @@ const role = ref('');
 let pusher = null;
 let channel = null;
 
+const handleScoreAwarded = () => {
+  getStudentsBySection();
+};
+
+const handleBuzzEvent = () => {
+  getStudentsBySection();
+};
+
 onMounted(async () => {
-  // Fetch initial data
   await getSection();
   await getStudentsBySection();
 
-  // Initialize Pusher
   pusher = new Pusher("423a1b2b7b3786d99280", {
     cluster: "ap1",
   });
 
-  // Subscribe to the channel
   channel = pusher.subscribe("buzz-channel");
-
-  // Bind to the `score-awarded` event
-  channel.bind("score-awarded", () => {
-    getStudentsBySection();
-  });
-
-  // Bind to the `buzz-event` event
-  channel.bind("buzz-event", () => {
-    getStudentsBySection();
-  });
+  channel.bind("score-awarded", handleScoreAwarded);
+  channel.bind("buzz-event", handleBuzzEvent);
 });
 
 
