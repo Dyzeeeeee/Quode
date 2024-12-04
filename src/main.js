@@ -1,22 +1,16 @@
 import { createApp } from 'vue';
 import './style.css';
-import axios from 'axios'; // Import axios
-import { Icon } from '@iconify/vue'; // Import the Icon component
+import { Icon } from '@iconify/vue';
 import App from './App.vue';
 import router from './router';
+import FontAwesomeIcon from "./font-awesome";
 
-// Set the base URL for axios requests
-const baseURL = 'https://anahaw.shop/v2/';
-axios.defaults.baseURL = baseURL;
-
-// Create the Vue app and use the router
 const app = createApp(App);
 
-// Register the Icon component globally
 app.component('Icon', Icon);
 
-// Use the router
 app.use(router);
 
-// Mount the app
+app.component("font-awesome-icon", FontAwesomeIcon);
+
 app.mount('#app');
