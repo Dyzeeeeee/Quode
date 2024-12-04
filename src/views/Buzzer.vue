@@ -74,7 +74,6 @@ const resetButton = async () => {
     }
 }
 
-const buzzerLocked = ref(true);
 
 const pressButton = async () => {
     const userData = JSON.parse(sessionStorage.getItem('userData')); // Retrieve the userdata object from sessionStorage
@@ -88,8 +87,8 @@ const pressButton = async () => {
         const response = await axios.post(`/buzz`, {
             user_id: parseInt(userId)
         });
+        console.log("buzz", buzzerLocked.value)
         console.log('Button pressed:', response.data);
-        buzzerLocked.value = response.data.is_buzzer_locked;
     } catch (error) {
         console.error('Error pressing button:', error.message);
     }
@@ -132,24 +131,25 @@ let pusher = null;
 let channel = null;
 
 const handleScoreAwarded = () => {
-  getStudentsBySection();
+    getStudentsBySection();
 };
 
 const handleBuzzEvent = () => {
-  getStudentsBySection();
+    getStudentsBySection();
 };
 
 onMounted(async () => {
-  await getSection();
-  await getStudentsBySection();
+    await getSection();
+    await getStudentsBySection();
+    role.value = sessionStorage.getItem('role');
 
-  pusher = new Pusher("423a1b2b7b3786d99280", {
-    cluster: "ap1",
-  });
+    pusher = new Pusher("423a1b2b7b3786d99280", {
+        cluster: "ap1",
+    });
 
-  channel = pusher.subscribe("buzz-channel");
-  channel.bind("score-awarded", handleScoreAwarded);
-  channel.bind("buzz-event", handleBuzzEvent);
+    channel = pusher.subscribe("buzz-channel");
+    channel.bind("score-awarded", handleScoreAwarded);
+    channel.bind("buzz-event", handleBuzzEvent);
 });
 
 
@@ -165,6 +165,10 @@ const handleLeave = async () => {
     router.push('/')
 }
 
+const buzzerLocked = computed(() => {
+    const currentStudent = students.value.find(student => student.id === currentUserId);
+    return currentStudent ? currentStudent.is_buzzer_locked == true : false;
+});
 
 </script>
 
@@ -252,9 +256,9 @@ const handleLeave = async () => {
 
                     <div
                         class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
-                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerLocked === '1' ? 'locked' : '']"
+                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerLocked ? 'locked' : '']"
                             @click="pressButton">
-                            <span>{{ buzzerLocked === '1' ? 'LOCKED' : 'BUZZ' }}</span>
+                            <span>{{ buzzerLocked ? 'LOCKED' : 'BUZZ' }}</span>
                         </button>
 
 
