@@ -127,45 +127,27 @@ const spinIcon = ref(false);
 
 const role = ref('');
 
-onMounted(() => {
-    // getBuzzerState();
-    // getStudents();
-    getSection();
-    getStudentsBySection();
-    const storedValue = sessionStorage.getItem('isBuzzerLocked');
-    if (storedValue !== null) {
-        buzzerLocked.value = JSON.parse(storedValue);
-    } role.value = sessionStorage.getItem('role');
+// Pusher setup
+let pusher = null;
+let channel = null;
+
+onMounted(async () => {
+    // Fetch initial data
+    await getSection();
+    await getStudentsBySection();
 
     // Initialize Pusher
-    const pusher = new Pusher('423a1b2b7b3786d99280', {
-        cluster: 'ap1'
+    pusher = new Pusher("423a1b2b7b3786d99280", {
+        cluster: "ap1",
     });
 
-    // Subscribe to the primary buzzer channel
-    const buzzerChannel = pusher.subscribe('buzzer-channel');
-    buzzerChannel.bind('buzzer-pressed', (data) => {
-        console.log('Buzzer pressed event:', data);
-        getStudents(); // Refresh students list
-        getBuzzerState(); // Refresh buzzer state
-        startSpin(); // Trigger animation or update UI
-    });
+    // Subscribe to the channel
+    channel = pusher.subscribe("buzz-channel");
 
-    buzzerChannel.bind('score-awarded', (data) => {
-        console.log('Buzzer reset event:', data);
-        
-    getSection();
-    getStudentsBySection();
-    });
-
-    // Subscribe to the new additional channel
-    const newChannel = pusher.subscribe('additional-channel');
-    newChannel.bind('buzzer-reset', (data) => {
-        console.log('Additional channel event received:', data);
-        getStudents();
-        getBuzzerState();
-    });
+    // Bind to the `score-awarded` event
+    channel.bind("score-awarded", getStudentsBySection());
 });
+
 
 const handleLeave = async () => {
     try {
