@@ -41,19 +41,26 @@ async function fetchStudentsBySection() {
     const response = await apiServices.getStudentsBySection(sectionId);
     students.value = response;
 
-    // Filter active students and sort by sequence
-    activeStudents.value = students.value
-        .filter(student => student.is_online === "1")
-        .sort((a, b) => {
-            // Sort `null` sequence values last
-            if (a.sequence === null && b.sequence === null) return 0;
-            if (a.sequence === null) return 1;
-            if (b.sequence === null) return -1;
+    // Filter active students
+    activeStudents.value = students.value.filter(student => student.is_online === "1");
 
-            // Sort by sequence ascending
-            return a.sequence - b.sequence;
-        });
+    // Place the user with `userId` at the top and sort the rest by sequence
+    activeStudents.value.sort((a, b) => {
+        if (a.id === userId.value) return -1; // User comes first
+        if (b.id === userId.value) return 1;
+
+        // Sort `null` sequence values last
+        if (a.sequence === null && b.sequence === null) return 0;
+        if (a.sequence === null) return 1;
+        if (b.sequence === null) return -1;
+
+        // Sort by sequence ascending
+        return a.sequence - b.sequence;
+    });
 }
+
+
+const currentUserId = ref(sessionStorage.getItem('userId'));
 
 
 const handleScoreAwarded = () => {
@@ -208,12 +215,15 @@ onMounted(() => {
                                 <!-- Ranking Icon -->
                                 <div
                                     class="flex items-center justify-center min-w-10 min-h-10 rounded-full bg-white shadow-md">
-                                    <i v-if="student.sequence === 1" class="text-yellow-400 fas fa-trophy text-xl"
-                                        title="First Place"></i>
-                                    <i v-else-if="student.sequence === 2" class="text-gray-300 fas fa-medal text-xl"
-                                        title="Second Place"></i>
-                                    <i v-else-if="student.sequence === 3" class="text-brown-500 fas fa-medal text-xl"
-                                        title="Third Place"></i>
+                                    <span v-if="student.sequence === 1" class="text-yellow-400" title="First Place">
+                                        <iconify-icon icon="mdi:trophy" class="text-xl"></iconify-icon>
+                                    </span>
+                                    <span v-else-if="student.sequence === 2" class="text-gray-300" title="Second Place">
+                                        <iconify-icon icon="mdi:medal" class="text-xl"></iconify-icon>
+                                    </span>
+                                    <span v-else-if="student.sequence === 3" class="text-brown-500" title="Third Place">
+                                        <iconify-icon icon="mdi:medal-outline" class="text-xl"></iconify-icon>
+                                    </span>
                                     <span v-else class="text-[#295d90] font-bold text-lg" title="Not Ranked">
                                         {{ student.sequence ?? "-" }}
                                     </span>

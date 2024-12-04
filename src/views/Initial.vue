@@ -196,6 +196,7 @@ watch(selectedSection, (newSectionId) => {
     const selected = sectionGrouped.value.find(section => section.section_id === newSectionId);
     if (selected) {
         sessionStorage.setItem('selectedSectionId', selected.section_id);
+        sessionStorage.setItem('selectedSectionName', selected.section_name);
     }
 });
 

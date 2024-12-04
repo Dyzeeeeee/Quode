@@ -13,6 +13,12 @@ const routes = [
         component: () => import('../views/Buzzer.vue'),
         // props: true
     },
+    {
+        path: '/spinner/:id',
+        name: 'spinner',
+        component: () => import('../views/Spinner.vue'),
+        // props: true
+    },
 ];
 
 const router = createRouter({
