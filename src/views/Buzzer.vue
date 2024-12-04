@@ -151,10 +151,11 @@ onMounted(() => {
         startSpin(); // Trigger animation or update UI
     });
 
-    buzzerChannel.bind('buzzer-reset', (data) => {
+    buzzerChannel.bind('score-awarded', (data) => {
         console.log('Buzzer reset event:', data);
-        getStudents();
-        getBuzzerState();
+        
+    getSection();
+    getStudentsBySection();
     });
 
     // Subscribe to the new additional channel
@@ -167,8 +168,16 @@ onMounted(() => {
 });
 
 const handleLeave = async () => {
-    router.push('/');
-};
+    try {
+        const response = await axios.post(`/logout`, {
+            user_id: parseInt(currentUserId)
+        });
+        console.log('Button pressed:', response.data);
+    } catch (error) {
+        console.error('Error pressing button:', error.message);
+    }
+    router.push('/')
+}
 
 
 </script>
