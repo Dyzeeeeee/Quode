@@ -7,7 +7,7 @@ const routes = [
         component: () => import('../views/Initial.vue')
     },
     {
-        path: '/buzzer/:section',
+        path: '/buzzer/:id',
         name: 'buzzer',
         component: () => import('../views/Buzzer.vue'),
         props: true

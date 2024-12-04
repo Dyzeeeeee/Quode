@@ -6,7 +6,7 @@ import App from './App.vue';
 import router from './router';
 
 // Set the base URL for axios requests
-const baseURL = 'https://anahaw.shop/';
+const baseURL = 'https://anahaw.shop/v2/';
 axios.defaults.baseURL = baseURL;
 
 // Create the Vue app and use the router
