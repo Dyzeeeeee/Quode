@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+
 const routes = [
     {
         path: '/',
@@ -10,7 +11,7 @@ const routes = [
         path: '/buzzer/:id',
         name: 'buzzer',
         component: () => import('../views/Buzzer.vue'),
-        props: true
+        // props: true
     },
 ];
 

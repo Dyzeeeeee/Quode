@@ -206,7 +206,8 @@ onMounted(() => {
                                 </div> -->
                                 </div>
                                 <!-- Ranking Icon -->
-                                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md">
+                                <div
+                                    class="flex items-center justify-center min-w-10 min-h-10 rounded-full bg-white shadow-md">
                                     <i v-if="student.sequence === 1" class="text-yellow-400 fas fa-trophy text-xl"
                                         title="First Place"></i>
                                     <i v-else-if="student.sequence === 2" class="text-gray-300 fas fa-medal text-xl"
