@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import ApiServices from '@/services/ApiServices';
 import Pusher from 'pusher-js';
 import { useRoute, useRouter } from 'vue-router';
@@ -27,18 +27,34 @@ const role = ref('player');
 const firstBuzzer = computed(() => {
     return activeStudents.value.find(student => student.sequence === "1") || null;
 });
+
+const lockBuzzer = ref(0);
 const buzzerLocked = computed(() => {
     const student = activeStudents.value.find(student => student.id === userId.value);
     return student ? student.is_buzzer_locked : "0";
 });
 const sectionId = route.params.id;
 
+watch(buzzerLocked, (newVal) => {
+    lockBuzzer.value = newVal;
+});
 
 async function fetchSectionNameAndUserIdAndRole() {
     sectionName.value = sessionStorage.getItem('selectedSectionName');
     userId.value = sessionStorage.getItem('userId')
     role.value = sessionStorage.getItem('role');
 }
+
+import buzzerSound from '@/assets/audio/buzzer.mp3'; // Import the audio file
+
+const audio = ref(null);
+
+onMounted(() => {
+    // Create the Audio object with the imported file
+    audio.value = new Audio(buzzerSound);
+    audio.value.load(); // Preload the audio
+});
+
 
 async function fetchStudentsBySection() {
     const response = await apiServices.getStudentsBySection(sectionId);
@@ -121,9 +137,17 @@ const openSettings = async () => {
 }
 
 const pressButton = async () => {
+    lockBuzzer.value = 1;
+    console.log("value ng buzzer ", lockBuzzer.value)
+    if (audio.value) {
+        audio.value.play();
+    } else {
+        console.error('Audio is not loaded');
+    }
     const data = {
         user_id: userId.value
     }
+
     const response = await apiServices.buzz(data);
 
 }
@@ -234,9 +258,9 @@ onMounted(() => {
 
                     <div
                         class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
-                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerLocked === '1' ? 'locked' : '']"
-                            :disabled="buzzerLocked === '1'" @click="pressButton">
-                            <span>{{ buzzerLocked === '1' ? 'LOCKED' : 'BUZZ' }}</span>
+                        <button :class="['buzzer-btn h-72 w-72 flex self-center', lockBuzzer == '1' ? 'locked' : '']"
+                            :disabled="lockBuzzer == '1'" @click="pressButton">
+                            <span>{{ lockBuzzer == '1' ? 'LOCKED' : 'BUZZ' }}</span>
                         </button>
 
                     </div>
@@ -460,6 +484,7 @@ onMounted(() => {
                 Close
             </button>
         </div>
+
     </div>
 </template>
 
