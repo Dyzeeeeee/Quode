@@ -37,15 +37,9 @@ const routes = [
     // props: true
   },
   {
-    path: "/learn/:id/font-size",
-    name: "learn-font-size",
-    component: () => import("../views/LearnFontSize.vue"),
-    // props: true
-  },
-  {
-    path: "/learn/:id/text-align",
-    name: "learn-text-align",
-    component: () => import("../views/LearnTextAlign.vue"),
+    path: "/learn/:id/text-color",
+    name: "learn-text-color",
+    component: () => import("../views/LearnTextColor.vue"),
     // props: true
   },
 ];

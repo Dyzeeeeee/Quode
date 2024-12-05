@@ -4,18 +4,60 @@ import ApiServices from '@/services/ApiServices';
 import Pusher from 'pusher-js';
 import { useRoute, useRouter } from 'vue-router';
 
+
+const goToFontSizePage = () => {
+    router.push(`/learn/${sectionId}/font-size`);
+};
+
+const navigateTo = (styleType) => {
+    switch (styleType) {
+        case 'textcolor':
+            router.push(`/learn/${sectionId}/text-color`); // Example route, adjust as needed
+            break;
+        case 'bgcolor':
+            router.push(`/learn/${sectionId}/bg-color`); // Example route, adjust as needed
+            break;
+        case 'fontsize':
+            router.push(`/learn/${sectionId}/font-size`); // Example route, adjust as needed
+            break;
+        case 'textalign':
+            router.push(`/learn/${sectionId}/text-align`); // Example route, adjust as needed
+            break;
+        default:
+            break;
+    }
+};
+
+
+const unitsModal = ref(false);
+
+// List of CSS units of measurement with their descriptions
+const cssUnits = [
+    { unit: 'px', description: 'Pixels (Fixed size)' },
+    { unit: 'em', description: 'Relative to the parent element\'s font size' },
+    { unit: 'rem', description: 'Relative to the root element\'s font size' },
+    { unit: '%', description: 'Percentage (relative to the parent element)' },
+    { unit: 'vw', description: 'Viewport width (1% of the viewport width)' },
+    { unit: 'vh', description: 'Viewport height (1% of the viewport height)' },
+    { unit: 'pt', description: 'Points (1pt = 1/72 of an inch)' },
+    { unit: 'cm', description: 'Centimeters' },
+    { unit: 'mm', description: 'Millimeters' },
+    { unit: 'in', description: 'Inches (1in = 2.54 cm)' },
+    { unit: 'ch', description: 'Relative to the width of the "0" (zero) character' },
+    { unit: 'ex', description: 'Relative to the height of the "x" character' },
+    { unit: 'rem', description: 'Root em (relative to the root element)' },
+];
+
 const route = useRoute();
 const router = useRouter();
 const apiServices = new ApiServices();
-const goToTextColorPage = () => {
-    router.push(`/learn/${sectionId}/text-color`);
-};
 
 const showActiveStudents = ref(false);
 const showInactiveStudents = ref(false);
 
+const colorsModal = ref(false);
+
 const isModalOpen = ref(false);
-const LearnModal = ref(false);
 const settings = ref({
     hawking: false,
     mendeleev: false,
@@ -138,20 +180,20 @@ const handleLeave = async () => {
 }
 
 const openSettings = async () => {
-    LearnModal.value = true;
-    // isModalOpen.value = true;
+    isModalOpen.value = true;
 }
 
 const pressButton = async () => {
     lockBuzzer.value = 1;
+    // lockBuzzer.value = 1;
     console.log("value ng buzzer ", lockBuzzer.value)
     console.log("fist", firstBuzzer.value)
 
-    if (audio.value) {
-        audio.value.play();
-    } else {
-        console.error('Audio is not loaded');
-    }
+    // if (audio.value) {
+    // audio.value.play();
+    // } else {
+    // console.error('Audio is not loaded');
+    // }
     const data = {
         user_id: userId.value
     }
@@ -246,49 +288,99 @@ onMounted(() => {
 
 
                 <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
-                    <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
-                        <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">FIRST BUZZER
+                    <div class="p-2 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
+                        <div class="flex text-center text-white text-2xl justify-center font-extrabold">CSS: Inline
+                            Styling
                         </div>
-                        <div v-if="firstBuzzer"
-                            class="flex gap-3 text-white font-bold text-xl bg-[#0ed494] p-2 rounded-lg">
-                            <img :src="firstBuzzer.avatar" alt="User Avatar"
-                                class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
-                            <div class="self-center">{{ firstBuzzer.name }}</div>
+                        <div class="flex text-center text-[#0ed494] text-xl justify-center font-extrabold">Text Align
                         </div>
-                        <div v-else
-                            class="flex gap-3 text-white font-bold text-xl bg-[#778480] p-2 rounded-lg bg-opacity-50 border-gray-500 opacity-50 border-[3px] border-dashed">
-                            <img src="https://media.istockphoto.com/id/1162198273/vector/question-mark-icon-flat-vector-illustration-design.jpg?s=612x612&w=0&k=20&c=MJbd8bw2iewJRd8sEkHxyGMgY3__j9MKA8cXvIvLT9E="
-                                alt="User Avatar"
-                                class="w-12 h-12 object-cover rounded-full border-gray-500 border-[3px] border-dashed bg-[#a3a6a9]" />
-                            <div class="self-center">----</div>
+                        <div class="h-[55vh] border-2 mt-2 rounded-lg border-gray-500 text-white p-2 flex-col flex">
+                            <!-- Code Section -->
+                            <div class="font-bold">Code:</div>
+                            <div class="p-0 text-xs">
+                                &lt;p <span class="text-yellow-500 font-bold">style="text-align:
+                                    left;"</span>&gt;Sample&lt;/p&gt; <br>
+                                &lt;p <span class="text-yellow-500 font-bold">style="text-align:
+                                    center;"</span>&gt;Sample&lt;/p&gt; <br>
+                                &lt;p <span class="text-yellow-500 font-bold">style="text-align:
+                                    right;"</span>&gt;Sample&lt;/p&gt; <br>
+                            </div>
+
+                            <!-- Output Section -->
+                            <div class="font-bold mt-3">Output:</div>
+                            <div class="text-white">
+                                <p style="text-align: left" class="p-2">Sample</p>
+                                <p style="text-align: center" class="p-2">Sample</p>
+                                <p style="text-align: right" class="p-2">Sample</p>
+                            </div>
+
+                            <!-- Button to open Modal -->
+                            <!-- <div class="flex flex-col items-center justify-center flex-1">
+                                <button class="font-bold rounded-lg border-emerald-500 text-emerald-500 border-2 p-2"
+                                    @click="unitsModal = true">
+                                    View all CSS Units of Measurement
+                                </button>
+                            </div> -->
+                        </div>
+
+                    </div>
+                    <!-- Modal -->
+                    <div v-if="unitsModal"
+                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                        <div class="bg-[#274461] rounded-lg shadow-lg w-full max-w-4xl h-[100vh] text-white">
+                            <!-- Modal Header -->
+                            <div class="flex justify-between items-center p-4 border-b">
+                                <h2 class="text-xl font-bold">CSS Units of Measurement</h2>
+                                <button @click="unitsModal = false" class="text-red-500 font-bold text-3xl">
+                                    &times;
+                                </button>
+                            </div>
+
+                            <!-- Modal Content (Scrollable) -->
+                            <div class="overflow-auto h-[calc(100vh-72px)] p-4">
+                                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                    <!-- Display each CSS unit with description -->
+                                    <div v-for="(unit, index) in cssUnits" :key="index"
+                                        class="flex flex-col items-center p-2 border rounded-md">
+                                        <div
+                                            class="w-16 h-16 flex justify-center items-center bg-[#333] rounded-md border">
+                                            <span class="text-lg font-bold">{{ unit.unit }}</span>
+                                        </div>
+                                        <p class="text-sm mt-2">{{ unit.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!-- <div
+                        class=" p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex
+                                    justify-center">
+                                <div class=" h-72 ">
+
+                                </div>
+                            </div> -->
 
                     <div
-                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
-                        <button :class="['buzzer-btn h-72 w-72 flex self-center', lockBuzzer == '1' ? 'locked' : '']"
-                            :disabled="lockBuzzer == '1'" @click="pressButton">
-                            <span>{{ lockBuzzer == '1' ? 'LOCKED' : 'BUZZ' }}</span>
-                        </button>
-
-                    </div>
-
-                    <div v-if="role === 'admin'"
                         class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
-                        <div>
+                        <div class="flex gap-2">
 
-                            <button :disabled="!firstBuzzer" @click="resetButton" :class="[
-                                'text-white rounded-lg p-2 w-full mt-2',
-                                firstBuzzer ? 'bg-[#0ed494]' : 'bg-gray-400 cursor-not-allowed'
-                            ]">
-                                Reset
+                            <button
+                                :class="['text-white rounded-lg p-2 w-full mt-2 h-12 bg-[#0ed494] font-bold', lockBuzzer == '1' ? 'bg-gray-500 opacity-80' : '']"
+                                @click="pressButton">
+                                <span>{{ lockBuzzer == '1' ? 'Marked as Done' : 'Mark as Done' }}</span>
+                            </button>
+                            <button class="rounded-lg p-2 h-12 font-bold mt-2 bg-[#0ed494]" @click="goToFontSizePage">
+                                <Icon icon="fluent:previous-16-filled" height="20" />
+                            </button>
+                            <button class="bg-[#0ed494] rounded-lg p-2 h-12 font-bold mt-2" @click="goToBGColorPage">
+                                <Icon icon="fluent:next-16-filled" height="20" />
                             </button>
                         </div>
                     </div>
 
                 </div>
                 <div
-                    class="p-4 relative rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    class="hidden p-4 relative rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
                     <div class="flex">
                         <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
                             @click="showActiveStudents = !showActiveStudents">
@@ -358,7 +450,7 @@ onMounted(() => {
 
                 </div>
                 <div
-                    class="p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    class="hidden p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
                     <div class="flex">
                         <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
                             @click="showInactiveStudents = !showInactiveStudents">
@@ -437,84 +529,32 @@ onMounted(() => {
 
     <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-[#274461] bg-opacity-80 rounded-lg p-6 w-[90%] max-w-lg text-white">
-            <h2 class="text-2xl font-bold mb-4">Settings</h2>
-            <p class="mb-6">Which section is currently online?</p>
+            <h2 class="text-2xl font-bold mb-4">Learn CSS Inline Styling</h2>
+            <p class="mb-6">Jump to which styling?</p>
 
-            <div class="flex flex-col gap-4">
-                <div class="flex items-center justify-between">
-                    <span class="text-lg font-semibold">Hawking</span>
-                    <label class="inline-flex relative items-center cursor-pointer">
-                        <input type="checkbox" v-model="settings.hawking" class="sr-only peer" />
-                        <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-[#0ed494] transition-all">
-                        </div>
-                        <div
-                            class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow peer-checked:translate-x-5 transform transition-transform">
-                        </div>
-                    </label>
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <span class="text-lg font-semibold">Mendeleev</span>
-                    <label class="inline-flex relative items-center cursor-pointer">
-                        <input type="checkbox" v-model="settings.mendeleev" class="sr-only peer" />
-                        <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-[#0ed494] transition-all">
-                        </div>
-                        <div
-                            class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow peer-checked:translate-x-5 transform transition-transform">
-                        </div>
-                    </label>
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <span class="text-lg font-semibold">Faraday</span>
-                    <label class="inline-flex relative items-center cursor-pointer">
-                        <input type="checkbox" v-model="settings.faraday" class="sr-only peer" />
-                        <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-[#0ed494] transition-all">
-                        </div>
-                        <div
-                            class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow peer-checked:translate-x-5 transform transition-transform">
-                        </div>
-                    </label>
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <span class="text-lg font-semibold">Pascal</span>
-                    <label class="inline-flex relative items-center cursor-pointer">
-                        <input type="checkbox" v-model="settings.pascal" class="sr-only peer" />
-                        <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-[#0ed494] transition-all">
-                        </div>
-                        <div
-                            class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow peer-checked:translate-x-5 transform transition-transform">
-                        </div>
-                    </label>
-                </div>
+            <!-- Buttons for each style category -->
+            <div class="space-y-4">
+                <button class="w-full bg-emerald-500 text-white px-4 py-2 rounded-lg " @click="navigateTo('textcolor')">
+                    Text Color
+                </button>
+                <button class="w-full bg-emerald-500 text-white px-4 py-2 rounded-lg " @click="navigateTo('bgcolor')">
+                    Background Color
+                </button>
+                <button class="w-full bg-emerald-500 text-white px-4 py-2 rounded-lg " @click="navigateTo('fontsize')">
+                    Font Size
+                </button>
+                <button class="w-full bg-emerald-500 text-white px-4 py-2 rounded-lg " @click="navigateTo('textalign')">
+                    Text Align
+                </button>
             </div>
 
-            <button class="mt-6 bg-[#0ed494] text-white px-4 py-2 rounded hover:bg-[#0db883] w-full"
+            <button class="mt-6 text-red-500 border-red-500 border-2 text-white px-4 py-2 rounded-lg w-full"
                 @click="closeSettings">
                 Close
             </button>
         </div>
-
     </div>
 
-
-    <div v-if="LearnModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-[#274461] bg-opacity-80 rounded-lg p-6 w-[90%] max-w-lg text-white">
-            <div class="flex text-center text-white text-2xl justify-center font-extrabold">CSS: Inline
-                Styling
-            </div>
-            <button class="mt-6 bg-[#0ed494] text-white px-4 py-2 rounded-lg hover:bg-[#0db883] w-full"
-                @click="goToTextColorPage">
-                Start Learning
-            </button>
-            <button class="mt-2 text-red-600 border-2 border-red-500 text-white px-4 py-2 rounded-lg  w-full"
-                @click="LearnModal = false">
-                Close
-            </button>
-        </div>
-
-    </div>
 </template>
 
 <style scoped>
