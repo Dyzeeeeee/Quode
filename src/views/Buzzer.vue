@@ -8,6 +8,9 @@ const route = useRoute();
 const router = useRouter();
 const apiServices = new ApiServices();
 
+const showActiveStudents = ref(false);
+const showInactiveStudents = ref(false);
+
 const isModalOpen = ref(false);
 const settings = ref({
     hawking: false,
@@ -59,20 +62,49 @@ async function fetchStudentsBySection() {
     });
 }
 
+const inactiveStudents = ref([]);
+
+async function fetchInactiveStudentsBySection() {
+    const response = await apiServices.getStudentsBySection(sectionId);
+    students.value = response;
+
+    // Filter active students
+    inactiveStudents.value = students.value.filter(student => student.is_online === "0");
+
+    // Place the user with `userId` at the top and sort the rest by sequence
+    inactiveStudents.value.sort((a, b) => {
+        if (a.id === userId.value) return -1; // User comes first
+        if (b.id === userId.value) return 1;
+
+        // Sort `null` sequence values last
+        if (a.sequence === null && b.sequence === null) return 0;
+        if (a.sequence === null) return 1;
+        if (b.sequence === null) return -1;
+
+        // Sort by sequence ascending
+        return a.sequence - b.sequence;
+    });
+}
+
 
 const currentUserId = ref(sessionStorage.getItem('userId'));
 
 
 const handleScoreAwarded = () => {
     fetchStudentsBySection();
+    fetchInactiveStudentsBySection();
 };
 
 const handleBuzzEvent = () => {
     fetchStudentsBySection();
+    fetchInactiveStudentsBySection();
+
 };
 
 const handleUserLoggedIn = () => {
     fetchStudentsBySection();
+    fetchInactiveStudentsBySection();
+
 };
 
 
@@ -119,6 +151,7 @@ let loginChannel = null;
 onMounted(() => {
     fetchSectionNameAndUserIdAndRole();
     fetchStudentsBySection();
+    fetchInactiveStudentsBySection();
 
     pusher = new Pusher("63b3aef700906222c623", {
         cluster: "ap1",
@@ -137,13 +170,14 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-center min-h-screen bg-black">
+    <div class="flex flex-col items-center justify-center min-h-screen bg-[#274461]">
         <video autoplay muted playsinline
-            class="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none">
+            class="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none xl:flex hidden">
             <source src="@/assets/images/appbg-flip.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
-        <div class="bg-black border-white border-2 flex flex-col xl:w-[80%] h-auto w-full rounded-lg p-4">
+        <div
+            class="bg-[#1c1f23] xl:bg-black border-white border-2 flex flex-col xl:w-[80%] h-auto w-full rounded-lg p-4">
             <div class="relative flex px-3 pt-2">
                 <!-- Left Section -->
                 <div class="flex-1 flex justify-start transform text-red-500 opacity-70">
@@ -176,26 +210,73 @@ onMounted(() => {
                     <Icon icon="carbon:settings" class="text-2xl" />
                 </button>
             </div>
-            <div class="flex h-full gap-3">
-                <div
-                    class="p-4 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block hidden">
-                    <div class="flex">
-                        <div class="flex-1"></div>
-                        <div class="flex-1">
-                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">STUDENTS
-                            </div>
-                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold mb-3">
-                                {{ activeStudents.length }}/{{
-                                    students.length }}</div>
+            <div class="xl:flex h-full gap-3">
+
+
+                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
+                    <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
+                        <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">FIRST BUZZER
                         </div>
-                        <div class="flex-1 text-white">
-                            <button @click="startSpin">
-                                <Icon icon="tdesign:refresh" height="20" :class="{ spin: spinIcon }" />
+                        <div v-if="firstBuzzer"
+                            class="flex gap-3 text-white font-bold text-xl bg-[#0ed494] p-2 rounded-lg">
+                            <img :src="firstBuzzer.avatar" alt="User Avatar"
+                                class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
+                            <div class="self-center">{{ firstBuzzer.name }}</div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
+                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerLocked === '1' ? 'locked' : '']"
+                            :disabled="buzzerLocked === '1'" @click="pressButton">
+                            <span>{{ buzzerLocked === '1' ? 'LOCKED' : 'BUZZ' }}</span>
+                        </button>
+
+                    </div>
+
+                    <div v-if="role === 'admin'"
+                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
+                        <div>
+
+                            <button @click="resetButton" class="text-white bg-[#0ed494] rounded-lg p-2 w-full mt-2">
+                                Reset
                             </button>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-3 max-h-[52vh] overflow-y-auto hidden-scrollbar">
-                        <div class="flex flex-col gap-3 max-h-[52vh] overflow-y-auto hidden-scrollbar">
+
+                </div>
+                <div
+                    class="p-4 relative rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    <div class="flex">
+                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
+                            @click="showActiveStudents = !showActiveStudents">
+                            <!-- Conditional icon rendering based on showActiveStudents -->
+                            <Icon
+                                :icon="showActiveStudents ? 'solar:alt-arrow-up-bold-duotone' : 'solar:alt-arrow-down-bold-duotone'"
+                                class="text-2xl" height="40" />
+                        </button>
+
+                        <div class="flex-1">
+                            <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">
+                                <div>ONLINE</div>
+                                <!-- <div class="text-white self-center">
+                                    <button @click="startSpin">
+                                        <Icon icon="tdesign:refresh" height="20" :class="{ spin: spinIcon }" />
+                                    </button>
+                                </div> -->
+                            </div>
+                            <div
+                                class="flex text-center text-[#0ed494] text-2xl items-center justify-center font-extrabold mb-3 self-center">
+                                <Icon icon="ic:baseline-circle" height="15" class="mr-1 text-[#14d049]" />
+                                <div class="text-[#0ed494]">{{ activeStudents.length }}/{{
+                                    students.length }}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="flex flex-col gap-3 min-h-[55vh] overflow-y-auto hidden-scrollbar"
+                        v-if="showActiveStudents">
+                        <div class="flex flex-col gap-3 max-h-[55vh] overflow-y-auto hidden-scrollbar">
                             <div v-for="student in activeStudents" :key="student.id"
                                 class="flex items-center gap-4 bg-[#295d90] p-4 rounded-lg shadow-md cursor-pointer transition hover:bg-[#3b76ad]"
                                 @click="awardPoint(student.id)"
@@ -229,38 +310,81 @@ onMounted(() => {
                                     </span>
                                 </div>
                             </div>
+
                         </div>
                     </div>
+
                 </div>
-
-                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
-                    <div class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
-                        <div class="flex text-center text-[#0ed494] text-2xl justify-center font-extrabold">FIRST BUZZER
-                        </div>
-                        <div v-if="firstBuzzer"
-                            class="flex gap-3 text-white font-bold text-xl bg-[#0ed494] p-2 rounded-lg">
-                            <img :src="firstBuzzer.avatar" alt="User Avatar"
-                                class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
-                            <div class="self-center">{{ firstBuzzer.name }}</div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex justify-center">
-                        <button :class="['buzzer-btn h-72 w-72 flex self-center', buzzerLocked === '1' ? 'locked' : '']"
-                            :disabled="buzzerLocked === '1'" @click="pressButton">
-                            <span>{{ buzzerLocked === '1' ? 'LOCKED' : 'BUZZ' }}</span>
+                <div
+                    class="p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    <div class="flex">
+                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
+                            @click="showInactiveStudents = !showInactiveStudents">
+                            <!-- Conditional icon rendering based on showInactiveStudents -->
+                            <Icon
+                                :icon="showInactiveStudents ? 'solar:alt-arrow-up-bold-duotone' : 'solar:alt-arrow-down-bold-duotone'"
+                                class="text-2xl" height="40" />
                         </button>
+                        <div class="flex-1">
+                            <div class="flex text-center text-[#b0efdb] text-2xl justify-center font-extrabold">
+                                <div>OFFLINE</div>
+                                <!-- <div class="text-white self-center">
+                                    <button @click="startSpin">
+                                        <Icon icon="tdesign:refresh" height="20" :class="{ spin: spinIcon }" />
+                                    </button>
+                                </div> -->
+                            </div>
+                            <div
+                                class="flex text-center text-[#b0efdb] text-2xl items-center justify-center font-extrabold mb-3 self-center">
+                                <Icon icon="ic:baseline-circle" height="15" class="mr-1 text-[#b0efdb]" />
+                                <div class="text-[#b0efdb]">{{ inactiveStudents.length }}/{{
+                                    students.length }}</div>
+                            </div>
+                        </div>
 
                     </div>
+                    <div v-if="showInactiveStudents"
+                        class="flex flex-col gap-3 min-h-[55vh] overflow-y-auto hidden-scrollbar">
+                        <div class="flex flex-col gap-3 max-h-[55vh] overflow-y-auto hidden-scrollbar">
+                            <div v-for="student in inactiveStudents" :key="student.id"
+                                class="relative flex items-center gap-4 bg-[#3f566c] p-4 rounded-lg shadow-md cursor-pointer transition"
+                                @click="awardPoint(student.id)"
+                                :class="[student.id === userId ? 'border-gray-500 border-[3px]' : 'border-transparent']">
 
-                    <div
-                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center">
-                        <div v-if="role === 'admin'">
+                                <!-- Overlay for Inactive Students -->
+                                <div v-if="!student.active" class="absolute inset-0 bg-gray-500 opacity-50 rounded-lg">
+                                </div>
 
-                            <button @click="resetButton" class="text-white bg-[#0ed494] rounded-lg p-2 w-full mt-2">
-                                Reset
-                            </button>
+                                <!-- Avatar -->
+                                <img :src="student.avatar" alt="Student Avatar"
+                                    class="w-14 h-14 object-cover rounded-full border-2 border-[#b0e0d1]" />
+
+                                <!-- Details -->
+                                <div class="flex flex-col flex-grow">
+                                    <div class="text-lg font-bold text-white">
+                                        {{ student.name }}
+                                    </div>
+                                </div>
+
+                                <!-- Ranking Icon -->
+                                <div
+                                    class="flex items-center justify-center min-w-10 min-h-10 rounded-full bg-white shadow-md">
+                                    <span v-if="student.sequence === 1" class="text-yellow-400" title="First Place">
+                                        <iconify-icon icon="mdi:trophy" class="text-xl"></iconify-icon>
+                                    </span>
+                                    <span v-else-if="student.sequence === 2" class="text-gray-300" title="Second Place">
+                                        <iconify-icon icon="mdi:medal" class="text-xl"></iconify-icon>
+                                    </span>
+                                    <span v-else-if="student.sequence === 3" class="text-brown-500" title="Third Place">
+                                        <iconify-icon icon="mdi:medal-outline" class="text-xl"></iconify-icon>
+                                    </span>
+                                    <span v-else class="text-[#295d90] font-bold text-lg" title="Not Ranked">
+                                        {{ student.sequence ?? "-" }}
+                                    </span>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
 
