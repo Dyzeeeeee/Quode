@@ -79,6 +79,17 @@
             </div>
         </div>
     </div>
+    <div v-if="showGform" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-[#0ed494] bg-opacity-90 p-6 rounded-lg shadow-lg w-[90vw]  ">
+            <div class="font-bold text-xl">Before anything else!</div>
+            <div class="text-xl">Answer this <span @click="goToGForms" class="text-blue-800 font-bold underline">Google
+                    Form</span> first!
+            </div>
+            <button class="mt-6 text-gray-500  px-4 py-2 w-full font-bold" @click="showGform = false">
+                Already responded
+            </button>
+        </div>
+    </div>
 </template>
 
 
@@ -90,7 +101,9 @@ import ApiServices from '@/services/ApiServices';
 // Services and Router
 const apiServices = new ApiServices();
 const router = useRouter();
-
+const goToGForms = () => {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfNgm7617fV5wHY7ymXtxPZcslYzaLhzoQf_C_jp9AVNEjZ-w/viewform?usp=sharing', '_blank');
+};
 // Constants
 const AVATAR_STYLES = {
     adventurer: 'adventurer',
@@ -132,8 +145,9 @@ const name = ref('');
 const seeder = ref(name.value);
 const avatarUrl = ref('');
 const selectedStyle = ref(AVATAR_STYLES.micah);
-const selectedSection = ref('');
-const selectedName = ref('');
+const selectedSection = ref(sessionStorage.getItem('selectedSectionId') || null);
+const selectedName = ref(sessionStorage.getItem('userId') || null);
+
 const sectionGrouped = ref([]);
 const isMenuOpen = ref(false);
 
@@ -157,6 +171,8 @@ const selectStyle = (style) => {
 const randomizeSeed = () => {
     seeder.value = Math.random().toString(36).substring(2, 10);
 };
+
+const showGform = ref(true)
 
 const handleJoin = async () => {
     const userData = { id: selectedName.value, avatar: avatarUrl.value };
