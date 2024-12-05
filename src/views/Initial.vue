@@ -96,10 +96,13 @@
 <script setup>
 import { ref, watchEffect, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import ApiServices from '@/services/ApiServices';
+import V3Services from '@/services/V3Services';
+
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 
 // Services and Router
-const apiServices = new ApiServices();
+const apiServices = new V3Services();
 const router = useRouter();
 const goToGForms = () => {
     window.open('https://docs.google.com/forms/d/e/1FAIpQLSfNgm7617fV5wHY7ymXtxPZcslYzaLhzoQf_C_jp9AVNEjZ-w/viewform?usp=sharing', '_blank');
@@ -145,8 +148,8 @@ const name = ref('');
 const seeder = ref(name.value);
 const avatarUrl = ref('');
 const selectedStyle = ref(AVATAR_STYLES.micah);
-const selectedSection = ref(sessionStorage.getItem('selectedSectionId') || null);
-const selectedName = ref(sessionStorage.getItem('userId') || null);
+const selectedSection = ref(localStorage.getItem('selectedSectionId') || null);
+const selectedName = ref(localStorage.getItem('userId') || null);
 
 const sectionGrouped = ref([]);
 const isMenuOpen = ref(false);
@@ -164,7 +167,7 @@ const toggleMenu = () => {
 
 const selectStyle = (style) => {
     selectedStyle.value = style;
-    sessionStorage.setItem('selectedStyle', style);
+    localStorage.setItem('selectedStyle', style);
     isMenuOpen.value = false;
 };
 
@@ -177,21 +180,39 @@ const showGform = ref(true)
 const handleJoin = async () => {
     const userData = { id: selectedName.value, avatar: avatarUrl.value };
 
-    sessionStorage.setItem('userData', JSON.stringify(userData));
-    sessionStorage.setItem('userId', selectedName.value);
+    // Store user data locally
+    localStorage.setItem('userData', JSON.stringify(userData));
+    localStorage.setItem('userId', selectedName.value);
 
     try {
+        // Call the backend login API
         const response = await apiServices.login(userData);
-        sessionStorage.setItem('role', response.role);
-        const selectedSectionId = sessionStorage.getItem('selectedSectionId');
 
-        // Navigate to the route using the stored ID
+        // Check if login was successful
+        localStorage.setItem('role', response.data.role);
+
+        const selectedSectionId = localStorage.getItem('selectedSectionId');
+        if (!selectedSectionId) {
+            throw new Error("No section selected.");
+        }
+
+        // Navigate to the buzzer page with the selected section ID
         router.push({ name: 'buzzer', params: { id: selectedSectionId } });
-
     } catch (error) {
-        console.error('Error logging in user:', error.response?.data || error.message);
+        const errorMessage = error.response?.data?.message || error.message;
+
+        console.error('Error logging in user:', errorMessage);
+
+        // Show error message using toast
+        toast.add({
+            severity: 'error',
+            summary: 'Login Failed',
+            detail: errorMessage,
+            life: 3000,
+        });
     }
 };
+
 
 const getSectionGrouping = async () => {
     try {
@@ -211,8 +232,8 @@ const getSectionGrouping = async () => {
 watch(selectedSection, (newSectionId) => {
     const selected = sectionGrouped.value.find(section => section.section_id === newSectionId);
     if (selected) {
-        sessionStorage.setItem('selectedSectionId', selected.section_id);
-        sessionStorage.setItem('selectedSectionName', selected.section_name);
+        localStorage.setItem('selectedSectionId', selected.section_id);
+        localStorage.setItem('selectedSectionName', selected.section_name);
     }
 });
 

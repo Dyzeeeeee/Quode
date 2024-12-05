@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import ApiServices from '@/services/ApiServices';
+import ApiServices from '@/services/V3Services';
 import Pusher from 'pusher-js';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -35,8 +35,12 @@ const firstBuzzer = computed(() => {
 const lockBuzzer = ref(0);
 const buzzerLocked = computed(() => {
     const student = activeStudents.value.find(student => student.id === userId.value);
-    return student ? student.is_buzzer_locked : "0";
+    const isBuzzerLocked = student ? student.is_buzzer_locked : "0";
+    const isAdmin = role.value === 'admin';
+
+    return isBuzzerLocked === '1' || isAdmin ? '1' : '0';
 });
+
 const sectionId = route.params.id;
 
 watch(buzzerLocked, (newVal) => {
@@ -44,9 +48,9 @@ watch(buzzerLocked, (newVal) => {
 });
 
 async function fetchSectionNameAndUserIdAndRole() {
-    sectionName.value = sessionStorage.getItem('selectedSectionName');
-    userId.value = sessionStorage.getItem('userId')
-    role.value = sessionStorage.getItem('role');
+    sectionName.value = localStorage.getItem('selectedSectionName');
+    userId.value = localStorage.getItem('userId')
+    role.value = localStorage.getItem('role');
 }
 
 import buzzerSound from '@/assets/audio/buzzer.mp3'; // Import the audio file
@@ -54,7 +58,7 @@ import buzzerSound from '@/assets/audio/buzzer.mp3'; // Import the audio file
 const audio = ref(null);
 
 onMounted(() => {
-    // Create the Audio object with the imported file
+    console.log(role.value);
     audio.value = new Audio(buzzerSound);
     audio.value.load(); // Preload the audio
     console.log("fist", firstBuzzer.value)
@@ -81,6 +85,9 @@ async function fetchStudentsBySection() {
         // Sort by sequence ascending
         return a.sequence - b.sequence;
     });
+
+    
+    console.log(activeStudents.value);
 }
 
 const inactiveStudents = ref([]);
@@ -108,7 +115,7 @@ async function fetchInactiveStudentsBySection() {
 }
 
 
-const currentUserId = ref(sessionStorage.getItem('userId'));
+const currentUserId = ref(localStorage.getItem('userId'));
 
 
 const handleScoreAwarded = () => {
@@ -128,12 +135,20 @@ const handleUserLoggedIn = () => {
 
 };
 
+const handleLogout = () => {
+    fetchStudentsBySection();
+    fetchInactiveStudentsBySection();
+
+
+}
+
 
 const handleLeave = async () => {
     const data = {
         user_id: userId.value
     }
     const response = await apiServices.logout(data);
+    localStorage.clear();
     router.push('/')
 }
 
@@ -164,6 +179,10 @@ const resetButton = async () => {
     const response = await apiServices.resetBuzzerState();
 }
 
+const logoutAll = async () => {
+    const response = await apiServices.logoutAll();
+}
+
 const closeSettings = async () => {
     isModalOpen.value = false
 }
@@ -189,6 +208,7 @@ onMounted(() => {
         cluster: "ap1",
     });
 
+
     // Subscribe to buzz-channel
     buzzChannel = pusher.subscribe("buzz-channel");
     buzzChannel.bind("score-awarded", handleScoreAwarded);
@@ -198,6 +218,10 @@ onMounted(() => {
     // Subscribe to login-channel
     loginChannel = pusher.subscribe("login-channel");
     loginChannel.bind("user-logged-in", handleUserLoggedIn);
+    // Subscribe to login-channel
+    
+    loginChannel = pusher.subscribe("logout-channel");
+    loginChannel.bind("all-players-logged-out", handleLogout);
 });
 </script>
 
@@ -282,6 +306,10 @@ onMounted(() => {
                                 firstBuzzer ? 'bg-[#0ed494]' : 'bg-gray-400 cursor-not-allowed'
                             ]">
                                 Reset
+                            </button>
+
+                            <button @click="logoutAll" :class=" 'text-white rounded-lg p-2 w-full mt-2 bg-red-500'">
+                                Log out All
                             </button>
                         </div>
                     </div>
