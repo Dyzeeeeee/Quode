@@ -223,7 +223,8 @@ onMounted(() => {
                                 class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
                             <div class="self-center">{{ firstBuzzer.name }}</div>
                         </div>
-                        <div v-else class="flex gap-3 text-white font-bold text-xl bg-[#778480] p-2 rounded-lg bg-opacity-50 border-[#000000] border-[3px] border-dashed">
+                        <div v-else
+                            class="flex gap-3 text-white font-bold text-xl bg-[#778480] p-2 rounded-lg bg-opacity-50 border-[#000000] border-[3px] border-dashed">
                             <img src="https://media.istockphoto.com/id/1162198273/vector/question-mark-icon-flat-vector-illustration-design.jpg?s=612x612&w=0&k=20&c=MJbd8bw2iewJRd8sEkHxyGMgY3__j9MKA8cXvIvLT9E="
                                 alt="User Avatar"
                                 class="w-12 h-12 object-cover rounded-full border-[#000000] border-[3px] border-dashed bg-[#a3a6a9]" />
