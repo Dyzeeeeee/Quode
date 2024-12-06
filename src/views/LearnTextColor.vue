@@ -295,7 +295,7 @@ onMounted(() => {
                             <div class="font-bold">Code:</div>
                             <div class="p-0 text-xs">
                                 &lt;h1 <span class="text-yellow-500 font-bold">style="color:
-                                    red;"</span>&gt;Sample&lt;/&gt; <br>
+                                    red;"</span>&gt;Sample&lt;/h1&gt; <br>
                                 &lt;h2 <span class="text-yellow-500 font-bold">style="color:
                                     yellow;"</span>&gt;Sample&lt;/h2&gt;
                                 <br>
