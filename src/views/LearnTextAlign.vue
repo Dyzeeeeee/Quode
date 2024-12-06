@@ -86,9 +86,9 @@ watch(buzzerLocked, (newVal) => {
 });
 
 async function fetchSectionNameAndUserIdAndRole() {
-    sectionName.value = sessionStorage.getItem('selectedSectionName');
-    userId.value = sessionStorage.getItem('userId')
-    role.value = sessionStorage.getItem('role');
+    sectionName.value = localnStorage.getItem('selectedSectionName');
+    userId.value = localnStorage.getItem('userId')
+    role.value = localnStorage.getItem('role');
 }
 
 import buzzerSound from '@/assets/audio/buzzer.mp3'; // Import the audio file
@@ -150,7 +150,7 @@ async function fetchInactiveStudentsBySection() {
 }
 
 
-const currentUserId = ref(sessionStorage.getItem('userId'));
+const currentUserId = ref(localnStorage.getItem('userId'));
 
 
 const handleScoreAwarded = () => {
