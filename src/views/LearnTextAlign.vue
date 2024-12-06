@@ -150,7 +150,7 @@ async function fetchInactiveStudentsBySection() {
 }
 
 
-const currentUserId = ref(localnStorage.getItem('userId'));
+const currentUserId = ref(localStorage.getItem('userId'));
 
 
 const handleScoreAwarded = () => {
