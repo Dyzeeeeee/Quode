@@ -199,13 +199,38 @@ const getFile = async () => {
 }
 
 const awardPoint = async (id) => {
+    // Show a confirmation dialog
+    const isConfirmed = window.confirm("Are you sure you want to award 1 point to this user?");
+
+    if (!isConfirmed) {
+        // Exit if the user cancels
+        return;
+    }
+
+    // Prepare the data
     const data = {
         user_id: id,
         score: 1
+    };
+
+    try {
+        // Call the API service to award the score
+        const response = await apiServices.awardScore(data);
+
+        if (response.status === 200) {
+            // Handle successful response (if needed)
+            alert("Point awarded successfully.");
+        } else {
+            // Handle error response (if needed)
+            alert("Failed to award point. Please try again.");
+        }
+    } catch (error) {
+        // Handle unexpected errors
+        console.error("Error awarding point:", error);
+        alert("An error occurred. Please try again later.");
     }
-    
-    const response = await apiServices.awardScore(data);
-}
+};
+
 
 let pusher = null;
 let buzzChannel = null;
@@ -273,9 +298,9 @@ onMounted(() => {
                 </div>
 
                 <!-- Settings Button -->
-                <button class="absolute top-0 right-3 text-gray-700 rounded-full shadow-md hover:text-gray-400"
+                <button class="absolute top-0 right-3 text-green-500 rounded-full shadow-md"
                     @click="openSettings">
-                    <Icon icon="carbon:settings" class="text-2xl" />
+                    <Icon icon="carbon:settings" class="text-4xl" />
                 </button>
             </div>
             <div class="xl:flex h-full gap-3">
