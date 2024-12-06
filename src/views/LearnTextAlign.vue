@@ -86,9 +86,9 @@ watch(buzzerLocked, (newVal) => {
 });
 
 async function fetchSectionNameAndUserIdAndRole() {
-    sectionName.value = localnStorage.getItem('selectedSectionName');
-    userId.value = localnStorage.getItem('userId')
-    role.value = localnStorage.getItem('role');
+    sectionName.value = localStorage.getItem('selectedSectionName');
+    userId.value = localStorage.getItem('userId')
+    role.value = localStorage.getItem('role');
 }
 
 import buzzerSound from '@/assets/audio/buzzer.mp3'; // Import the audio file
