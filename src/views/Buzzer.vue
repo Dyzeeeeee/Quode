@@ -194,6 +194,9 @@ const startSpin = () => {
     }, 1000);
 };
 
+const getFile = async () => {
+    const response = await apiServices.getFile();
+}
 
 let pusher = null;
 let buzzChannel = null;
@@ -527,22 +530,33 @@ onMounted(() => {
     </div>
 
 
-    <div v-if="LearnModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-[#274461] bg-opacity-80 rounded-lg p-6 w-[90%] max-w-lg text-white">
-            <div class="flex text-center text-white text-2xl justify-center font-extrabold">CSS: Inline
-                Styling
+    <div v-if="LearnModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div class="bg-gradient-to-r from-[#243b55] to-[#274461] shadow-lg rounded-lg p-6 w-[90%] max-w-md text-white relative">
+            <!-- Modal Title -->
+            <div class="text-center text-2xl font-extrabold mb-4">
+                CSS: Inline Styling
             </div>
-            <button class="mt-6 bg-[#0ed494] text-white px-4 py-2 rounded-lg hover:bg-[#0db883] w-full"
-                @click="goToTextColorPage">
+            <!-- Download File Button -->
+            <button
+                @click="getFile"
+                class="w-full mt-4 bg-[#10b981] text-white font-semibold px-4 py-3 rounded-md hover:bg-[#0aa96d] transition ease-in-out duration-300 shadow-sm">
+                Download File
+            </button>
+            <!-- Start Learning Button -->
+            <button
+            @click="goToTextColorPage"
+                class="w-full mt-4 bg-[#3b82f6] text-white font-semibold px-4 py-3 rounded-md hover:bg-[#2563eb] transition ease-in-out duration-300 shadow-sm">
                 Start Learning
             </button>
-            <button class="mt-2 text-red-600 border-2 border-red-500 text-white px-4 py-2 rounded-lg  w-full"
+            <!-- Close Button -->
+            <button
+                class="w-full mt-4 border-2 border-red-600 text-red-600 font-semibold px-4 py-3 rounded-md hover:bg-red-600 hover:text-white transition ease-in-out duration-300 shadow-sm"
                 @click="LearnModal = false">
                 Close
             </button>
         </div>
-
     </div>
+
 </template>
 
 <style scoped>

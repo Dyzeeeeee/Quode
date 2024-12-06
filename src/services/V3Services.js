@@ -47,6 +47,50 @@ export default class V3Services {
         return await apiRequest('post', this.basePath, 'logout-all', data);
     }
 
+    async getFile() {
+        return await apiRequest('get', this.basePath, 'files');
+    }
+
+    async getFile(token) {
+        try {
+    
+            const response = await axios.get(getFullApiUrl(this.basePath, 'files'), {
+                responseType: 'blob',
+            });
+    
+            if (response.status === 200) {
+                const contentDisposition = response.headers['content-disposition'];
+                let fileName = 'guide.pdf';
+    
+                if (contentDisposition) {
+                    const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+                    if (fileNameMatch && fileNameMatch.length === 2) {
+                        fileName = fileNameMatch[1];
+                    }
+                }
+    
+                const url = window.URL.createObjectURL(new Blob([response.data], { 
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                }));
+    
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+    
+                return 'Download successful';
+            } else {
+                console.error('Error: Unable to download the template.');
+                return 'Error: Unable to download template.';
+            }
+        } catch (error) {
+            console.error('Error downloading the Excel template: ', error);
+            throw error;
+        }
+    }
+
     
 
 }
