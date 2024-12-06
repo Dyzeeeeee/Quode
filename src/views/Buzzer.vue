@@ -338,9 +338,8 @@ onMounted(() => {
                         class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
                         <div>
 
-                            <button :disabled="!firstBuzzer" @click="resetButton" :class="[
-                                'text-white rounded-lg p-2 w-full mt-2',
-                                firstBuzzer ? 'bg-[#0ed494]' : 'bg-gray-400 cursor-not-allowed'
+                            <button @click="resetButton" :class="[
+                                'text-white rounded-lg p-2 w-full mt-2'
                             ]">
                                 Reset
                             </button>
