@@ -198,6 +198,15 @@ const getFile = async () => {
     const response = await apiServices.getFile();
 }
 
+const awardPoint = async (id) => {
+    const data = {
+        user_id: id,
+        score: 1
+    }
+    
+    const response = await apiServices.awardScore(data);
+}
+
 let pusher = null;
 let buzzChannel = null;
 let loginChannel = null;
@@ -343,6 +352,7 @@ onMounted(() => {
                                 <Icon icon="ic:baseline-circle" height="15" class="mr-1 text-[#14d049]" />
                                 <div class="text-[#0ed494]">{{ activeStudents.length }}/{{
                                     students.length }}</div>
+                                    
                             </div>
                         </div>
 

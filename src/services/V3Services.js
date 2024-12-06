@@ -47,6 +47,10 @@ export default class V3Services {
         return await apiRequest('post', this.basePath, 'logout-all', data);
     }
 
+    async awardScore(data) {
+        return await apiRequest('post', this.basePath, 'award', data);
+    }
+
     async getFile() {
         return await apiRequest('get', this.basePath, 'files');
     }
