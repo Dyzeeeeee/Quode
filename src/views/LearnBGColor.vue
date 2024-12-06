@@ -11,7 +11,6 @@ const goToTextColorPage = () => {
 const goToFontSizePage = () => {
     router.push(`/learn/${sectionId}/font-size`);
 };
-
 const navigateTo = (styleType) => {
     switch (styleType) {
         case 'textcolor':
@@ -25,6 +24,9 @@ const navigateTo = (styleType) => {
             break;
         case 'textalign':
             router.push(`/learn/${sectionId}/text-align`); // Example route, adjust as needed
+            break;
+        case 'buzzer':
+            router.push(`/buzzer/${sectionId}`); // Example route, adjust as needed
             break;
         default:
             break;
@@ -530,7 +532,7 @@ onMounted(() => {
             <p class="mb-6">Jump to which styling?</p>
 
             <!-- Buttons for each style category -->
-            <div class="space-y-4">
+            <div class="space-y-2">
                 <button class="w-full bg-emerald-500 text-white px-4 py-2 rounded-lg " @click="navigateTo('textcolor')">
                     Text Color
                 </button>
@@ -542,6 +544,9 @@ onMounted(() => {
                 </button>
                 <button class="w-full bg-emerald-500 text-white px-4 py-2 rounded-lg " @click="navigateTo('textalign')">
                     Text Align
+                </button>
+                <button class="w-full bg-emerald-500 text-white px-4 py-2 rounded-lg " @click="navigateTo('Buzzer')">
+                    Buzzer
                 </button>
             </div>
 
