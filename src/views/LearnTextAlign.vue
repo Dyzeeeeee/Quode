@@ -296,8 +296,8 @@ onMounted(() => {
                         </div>
                         <div class="h-[55vh] border-2 mt-2 rounded-lg border-gray-500 text-white p-2 flex-col flex">
                             <!-- Code Section -->
-                            <div class="font-bold">Code:</div>
-                            <div class="p-0 text-xs">
+                            <div class="font-bold ">Code:</div>
+                            <div class="p-0 text-xs xl:text-lg">
                                 &lt;p <span class="text-yellow-500 font-bold">style="text-align:
                                     left;"</span>&gt;Sample&lt;/p&gt; <br>
                                 &lt;p <span class="text-yellow-500 font-bold">style="text-align:
@@ -307,8 +307,8 @@ onMounted(() => {
                             </div>
 
                             <!-- Output Section -->
-                            <div class="font-bold mt-3">Output:</div>
-                            <div class="text-white">
+                            <div class="font-bold mt-3 ">Output:</div>
+                            <div class="text-white xl:text-xl">
                                 <p style="text-align: left" class="p-2">Sample</p>
                                 <p style="text-align: center" class="p-2">Sample</p>
                                 <p style="text-align: right" class="p-2">Sample</p>
@@ -449,7 +449,7 @@ onMounted(() => {
 
                 </div>
                 <div
-                    class="hidden p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    class="hidden p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:hidden xl:mt-0 mt-3">
                     <div class="flex">
                         <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
                             @click="showInactiveStudents = !showInactiveStudents">

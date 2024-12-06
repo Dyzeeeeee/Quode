@@ -175,7 +175,7 @@ const randomizeSeed = () => {
     seeder.value = Math.random().toString(36).substring(2, 10);
 };
 
-const showGform = ref(true)
+const showGform = ref(false)
 
 const handleJoin = async () => {
     const userData = { id: selectedName.value, avatar: avatarUrl.value };

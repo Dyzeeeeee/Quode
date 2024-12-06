@@ -86,7 +86,7 @@ async function fetchStudentsBySection() {
         return a.sequence - b.sequence;
     });
 
-    
+
     console.log(activeStudents.value);
 }
 
@@ -256,7 +256,7 @@ onMounted(() => {
     loginChannel = pusher.subscribe("login-channel");
     loginChannel.bind("user-logged-in", handleUserLoggedIn);
     // Subscribe to login-channel
-    
+
     loginChannel = pusher.subscribe("logout-channel");
     loginChannel.bind("all-players-logged-out", handleLogout);
 });
@@ -298,8 +298,7 @@ onMounted(() => {
                 </div>
 
                 <!-- Settings Button -->
-                <button class="absolute top-0 right-3 text-green-500 rounded-full shadow-md"
-                    @click="openSettings">
+                <button class="absolute top-0 right-3 text-green-500 rounded-full shadow-md" @click="openSettings">
                     <Icon icon="carbon:settings" class="text-4xl" />
                 </button>
             </div>
@@ -337,14 +336,21 @@ onMounted(() => {
                     <div v-if="role === 'admin'"
                         class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
                         <div>
+                            <div class="flex w-full gap-2">
+                                <button @click="resetButton" :class="[
+                                    'text-white rounded-lg p-2 w-full mt-2'
+                                ]">
+                                    Reset
+                                </button>
 
-                            <button @click="resetButton" :class="[
-                                'text-white rounded-lg p-2 w-full mt-2'
-                            ]">
-                                Reset
-                            </button>
-
-                            <button @click="logoutAll" :class=" 'text-white rounded-lg p-2 w-full mt-2 bg-red-500'">
+                                <button :disabled="!firstBuzzer" @click="resetButton" :class="[
+                                    'text-white rounded-lg p-2 w-full mt-2',
+                                    firstBuzzer ? 'bg-[#0ed494]' : 'bg-gray-400 cursor-not-allowed'
+                                ]">
+                                    Reset
+                                </button>
+                            </div>
+                            <button @click="logoutAll" :class="'text-white rounded-lg p-2 w-full mt-2 bg-red-500'">
                                 Log out All
                             </button>
                         </div>
@@ -376,7 +382,7 @@ onMounted(() => {
                                 <Icon icon="ic:baseline-circle" height="15" class="mr-1 text-[#14d049]" />
                                 <div class="text-[#0ed494]">{{ activeStudents.length }}/{{
                                     students.length }}</div>
-                                    
+
                             </div>
                         </div>
 
@@ -565,20 +571,19 @@ onMounted(() => {
 
 
     <div v-if="LearnModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-        <div class="bg-gradient-to-r from-[#243b55] to-[#274461] shadow-lg rounded-lg p-6 w-[90%] max-w-md text-white relative">
+        <div
+            class="bg-gradient-to-r from-[#243b55] to-[#274461] shadow-lg rounded-lg p-6 w-[90%] max-w-md text-white relative">
             <!-- Modal Title -->
             <div class="text-center text-2xl font-extrabold mb-4">
                 CSS: Inline Styling
             </div>
             <!-- Download File Button -->
-            <button
-                @click="getFile"
+            <button @click="getFile"
                 class="w-full mt-4 bg-[#10b981] text-white font-semibold px-4 py-3 rounded-md hover:bg-[#0aa96d] transition ease-in-out duration-300 shadow-sm">
                 Download File
             </button>
             <!-- Start Learning Button -->
-            <button
-            @click="goToTextColorPage"
+            <button @click="goToTextColorPage"
                 class="w-full mt-4 bg-[#3b82f6] text-white font-semibold px-4 py-3 rounded-md hover:bg-[#2563eb] transition ease-in-out duration-300 shadow-sm">
                 Start Learning
             </button>

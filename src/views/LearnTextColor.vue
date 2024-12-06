@@ -49,8 +49,8 @@ const route = useRoute();
 const router = useRouter();
 const apiServices = new ApiServices();
 
-const showActiveStudents = ref(false);
-const showInactiveStudents = ref(false);
+const showActiveStudents = ref(true);
+const showInactiveStudents = ref(true);
 
 const colorsModal = ref(false);
 
@@ -293,7 +293,7 @@ onMounted(() => {
                         </div>
                         <div class="h-[55vh] border-2 mt-2 rounded-lg border-gray-500 text-white p-2 flex-col flex">
                             <div class="font-bold">Code:</div>
-                            <div class="p-0 text-xs">
+                            <div class="p-0 text-xs xl:text-lg">
                                 &lt;h1 <span class="text-yellow-500 font-bold">style="color:
                                     red;"</span>&gt;Sample&lt;/h1&gt; <br>
                                 &lt;h2 <span class="text-yellow-500 font-bold">style="color:
@@ -306,9 +306,9 @@ onMounted(() => {
 
                             <div class="font-bold mt-3">Output:</div>
                             <div class="">
-                                <p style="color:red" class="text-2xl">Sample</p>
-                                <p style="color:yellow" class="text-xl">Sample</p>
-                                <p style="color:green">Sample</p>
+                                <p style="color:red" class="text-2xl xl:text-3xl">Sample</p>
+                                <p style="color:yellow" class="text-xl xl:text-2xl">Sample</p>
+                                <p style="color:green" class="xl:text-xl">Sample</p>
                             </div>
 
                             <div class="flex flex-col items-center justify-center flex-1">
@@ -351,8 +351,8 @@ onMounted(() => {
                 </div>
                 <div
                     class="hidden p-4 relative rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
-                    <div class="flex">
-                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
+                    <div class="flex ">
+                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400 xl:hidden"
                             @click="showActiveStudents = !showActiveStudents">
                             <!-- Conditional icon rendering based on showActiveStudents -->
                             <Icon
@@ -378,9 +378,9 @@ onMounted(() => {
                         </div>
 
                     </div>
-                    <div class="flex flex-col gap-3 min-h-[55vh] overflow-y-auto hidden-scrollbar"
+                    <div class="flex flex-col gap-3 min-h-[65vh] overflow-y-auto hidden-scrollbar"
                         v-if="showActiveStudents">
-                        <div class="flex flex-col gap-3 max-h-[55vh] overflow-y-auto hidden-scrollbar">
+                        <div class="flex flex-col gap-3 max-h-[65vh] overflow-y-auto hidden-scrollbar">
                             <div v-for="student in activeStudents" :key="student.id"
                                 class="flex items-center gap-4 bg-[#295d90] p-4 rounded-lg shadow-md cursor-pointer transition hover:bg-[#3b76ad]"
                                 @click="awardPoint(student.id)"
@@ -420,8 +420,8 @@ onMounted(() => {
 
                 </div>
                 <div
-                    class="hidden p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
-                    <div class="flex">
+                    class="hidden p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:hidden xl:mt-0 mt-3">
+                    <div class="flex xl:hidden">
                         <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
                             @click="showInactiveStudents = !showInactiveStudents">
                             <!-- Conditional icon rendering based on showInactiveStudents -->

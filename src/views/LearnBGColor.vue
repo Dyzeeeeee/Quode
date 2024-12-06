@@ -299,7 +299,7 @@ onMounted(() => {
                             class="h-[55vh] border-2 mt-2 rounded-lg border-gray-500 text-white p-2 flex-col flex flex-1">
                             <!-- Code Section -->
                             <div class="font-bold">Code:</div>
-                            <div class="p-0 text-xs">
+                            <div class="p-0 text-xs xl:text-lg">
                                 &lt;h1 <span class="text-yellow-500 font-bold">style="background-color:
                                     red;"</span>&gt;Sample&lt;/h1&gt; <br>
                                 &lt;h2 <span class="text-yellow-500 font-bold">style="background-color:
@@ -311,9 +311,9 @@ onMounted(() => {
                             <!-- Output Section -->
                             <div class="font-bold mt-3">Output:</div>
                             <div class="text-black">
-                                <p style="background-color:red" class="text-2xl p-2">Sample</p>
-                                <p style="background-color:yellow" class="text-xl p-2">Sample</p>
-                                <p style="background-color:green" class="p-2">Sample</p>
+                                <p style="background-color:red" class="xl:text-3xl text-2xl p-2">Sample</p>
+                                <p style="background-color:yellow" class="xl:text-2xl text-xl p-2">Sample</p>
+                                <p style="background-color:green" class="xl:text-xl p-2">Sample</p>
                             </div>
 
                             <!-- Button to open Modal -->
@@ -447,7 +447,7 @@ onMounted(() => {
 
                 </div>
                 <div
-                    class="hidden p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    class="hidden p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:hidden xl:mt-0 mt-3">
                     <div class="flex">
                         <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
                             @click="showInactiveStudents = !showInactiveStudents">
