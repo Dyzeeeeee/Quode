@@ -287,8 +287,8 @@ onMounted(() => {
             <div class="xl:flex h-full gap-3">
 
 
-                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
-                    <div class="p-2 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
+                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[100%] bg-[#274461] rounded-lg">
+                    <div class="p-2 rounded-lg  relative bg-opacity-70  flex-1">
                         <div class="flex text-center text-white text-2xl justify-center font-extrabold">CSS: Inline
                             Styling
                         </div>
@@ -360,8 +360,7 @@ onMounted(() => {
                                 </div>
                             </div> -->
 
-                    <div
-                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
+                    <div class="p-4 rounded-lg shadow-lg relative  bg-opacity-70 h-full flex  flex-col justify-center ">
                         <div class="flex gap-2">
 
                             <button

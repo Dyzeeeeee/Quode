@@ -287,15 +287,16 @@ onMounted(() => {
             <div class="xl:flex h-full gap-3">
 
 
-                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
-                    <div class="p-2 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
+                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[100%] bg-[#274461] rounded-lg ">
+                    <div class="p-2 rounded-lg  relative flex-1 bg-opacity-70">
                         <div class="flex text-center text-white text-2xl justify-center font-extrabold">CSS: Inline
                             Styling
                         </div>
                         <div class="flex text-center text-[#0ed494] text-xl justify-center font-extrabold">Background
                             Color
                         </div>
-                        <div class="h-[55vh] border-2 mt-2 rounded-lg border-gray-500 text-white p-2 flex-col flex">
+                        <div
+                            class="h-[55vh] border-2 mt-2 rounded-lg border-gray-500 text-white p-2 flex-col flex flex-1">
                             <!-- Code Section -->
                             <div class="font-bold">Code:</div>
                             <div class="p-0 text-xs">
@@ -324,48 +325,8 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-                    <!-- Modal -->
-                    <div v-if="colorsModal"
-                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                        <div class="bg-[#274461]  rounded-lg shadow-lg w-full max-w-4xl h-[100vh] text-white">
-                            <!-- Modal Header -->
-                            <div class="flex justify-between items-center p-4 border-b">
-                                <h2 class="text-xl font-bold">CSS Colors</h2>
-                                <button @click="colorsModal = false" class="text-red-500 font-bold text-3xl">
-                                    &times;
-                                </button>
-                            </div>
-
-                            <!-- Modal Content (Scrollable) -->
-                            <div class="overflow-auto h-[calc(100vh-72px)] p-4">
-                                <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
-                                    <div v-for="color in colors" :key="color"
-                                        class="flex flex-col items-center p-2 border rounded-md">
-                                        <div :style="{ backgroundColor: color }" class="w-16 h-16 rounded-md border">
-                                        </div>
-                                        <p class="text-sm mt-2">{{ color }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal Footer -->
-                            <!-- <div class="flex justify-end p-4 border-t">
-                                <button @click="showModal = false" class="bg-red-500 text-white px-4 py-2 rounded-lg">
-                                    Close
-                                </button>
-                            </div> -->
-                        </div>
-                    </div>
-                    <!-- <div
-                        class=" p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex
-                                    justify-center">
-                                <div class=" h-72 ">
-
-                                </div>
-                            </div> -->
-
                     <div
-                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
+                        class="p-4 relative rounded-lg shadow-lg bg-opacity-70 h-full flex  flex-col justify-center flex-1">
                         <div class="flex gap-2">
 
                             <button
@@ -411,6 +372,38 @@ onMounted(() => {
                             </div>
                         </div>
 
+                    </div>
+
+                    <div v-if="colorsModal"
+                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                        <div class="bg-[#274461]  rounded-lg shadow-lg w-full max-w-4xl h-[100vh] text-white">
+                            <!-- Modal Header -->
+                            <div class="flex justify-between items-center p-4 border-b">
+                                <h2 class="text-xl font-bold">CSS Colors</h2>
+                                <button @click="colorsModal = false" class="text-red-500 font-bold text-3xl">
+                                    &times;
+                                </button>
+                            </div>
+
+                            <!-- Modal Content (Scrollable) -->
+                            <div class="overflow-auto h-[calc(100vh-72px)] p-4">
+                                <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+                                    <div v-for="color in colors" :key="color"
+                                        class="flex flex-col items-center p-2 border rounded-md">
+                                        <div :style="{ backgroundColor: color }" class="w-16 h-16 rounded-md border">
+                                        </div>
+                                        <p class="text-sm mt-2">{{ color }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Footer -->
+                            <!-- <div class="flex justify-end p-4 border-t">
+                                <button @click="showModal = false" class="bg-red-500 text-white px-4 py-2 rounded-lg">
+                                    Close
+                                </button>
+                            </div> -->
+                        </div>
                     </div>
                     <div class="flex flex-col gap-3 min-h-[55vh] overflow-y-auto hidden-scrollbar"
                         v-if="showActiveStudents">

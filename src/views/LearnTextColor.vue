@@ -284,8 +284,8 @@ onMounted(() => {
             <div class="xl:flex h-full gap-3">
 
 
-                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[60%]">
-                    <div class="p-2 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-[30%]">
+                <div class="flex flex-col gap-3 w-full sm:w-full md:w-[60%] lg:w-[100%] bg-[#274461] rounded-lg ">
+                    <div class="p-2 rounded-lg  relative bg-opacity-100 flex-1">
                         <div class="flex text-center text-white text-2xl justify-center font-extrabold">CSS: Inline
                             Styling
                         </div>
@@ -321,37 +321,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Modal -->
-                    <div v-if="colorsModal"
-                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                        <div class="bg-[#274461]  rounded-lg shadow-lg w-full max-w-4xl h-[100vh] text-white">
-                            <!-- Modal Header -->
-                            <div class="flex justify-between items-center p-4 border-b">
-                                <h2 class="text-xl font-bold">CSS Colors</h2>
-                                <button @click="colorsModal = false" class="text-red-500 font-bold text-3xl">
-                                    &times;
-                                </button>
-                            </div>
 
-                            <!-- Modal Content (Scrollable) -->
-                            <div class="overflow-auto h-[calc(100vh-72px)] p-4">
-                                <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
-                                    <div v-for="color in colors" :key="color"
-                                        class="flex flex-col items-center p-2 border rounded-md">
-                                        <div :style="{ backgroundColor: color }" class="w-16 h-16 rounded-md border">
-                                        </div>
-                                        <p class="text-sm mt-2">{{ color }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal Footer -->
-                            <!-- <div class="flex justify-end p-4 border-t">
-                                <button @click="showModal = false" class="bg-red-500 text-white px-4 py-2 rounded-lg">
-                                    Close
-                                </button>
-                            </div> -->
-                        </div>
-                    </div>
                     <!-- <div
                         class=" p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex
                                     justify-center">
@@ -361,7 +331,7 @@ onMounted(() => {
                             </div> -->
 
                     <div
-                        class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
+                        class="p-4 rounded-lg shadow-lg relative  bg-opacity-70 h-full flex  flex-col justify-center  flex-1">
                         <div class="flex gap-2">
 
                             <button
@@ -527,6 +497,35 @@ onMounted(() => {
         </div>
     </div>
 
+    <div v-if="colorsModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-[#274461]  rounded-lg shadow-lg w-full max-w-4xl h-[100vh] text-white">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-xl font-bold">CSS Colors</h2>
+                <button @click="colorsModal = false" class="text-red-500 font-bold text-3xl">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div class="overflow-auto h-[calc(100vh-72px)] p-4">
+                <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <div v-for="color in colors" :key="color" class="flex flex-col items-center p-2 border rounded-md">
+                        <div :style="{ backgroundColor: color }" class="w-16 h-16 rounded-md border">
+                        </div>
+                        <p class="text-sm mt-2">{{ color }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <!-- <div class="flex justify-end p-4 border-t">
+                                <button @click="showModal = false" class="bg-red-500 text-white px-4 py-2 rounded-lg">
+                                    Close
+                                </button>
+                            </div> -->
+        </div>
+    </div>
     <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-[#274461] bg-opacity-80 rounded-lg p-6 w-[90%] max-w-lg text-white">
             <h2 class="text-2xl font-bold mb-4">Learn CSS Inline Styling</h2>
