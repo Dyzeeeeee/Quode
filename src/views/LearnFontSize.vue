@@ -56,8 +56,8 @@ const route = useRoute();
 const router = useRouter();
 const apiServices = new ApiServices();
 
-const showActiveStudents = ref(false);
-const showInactiveStudents = ref(false);
+const showActiveStudents = ref(true);
+const showInactiveStudents = ref(true);
 
 const colorsModal = ref(false);
 
@@ -79,10 +79,12 @@ const firstBuzzer = computed(() => {
 });
 
 const lockBuzzer = ref(0);
+
 const buzzerLocked = computed(() => {
     const student = activeStudents.value.find(student => student.id === userId.value);
     return student ? student.is_buzzer_locked : "0";
-});
+}); 
+
 const sectionId = route.params.id;
 
 watch(buzzerLocked, (newVal) => {
@@ -188,7 +190,7 @@ const openSettings = async () => {
 }
 
 const pressButton = async () => {
-    lockBuzzer.value = 1;
+    // lockBuzzer.value = 1;
     // lockBuzzer.value = 1;
     console.log("value ng buzzer ", lockBuzzer.value)
     console.log("fist", firstBuzzer.value)
@@ -260,7 +262,7 @@ onMounted(() => {
                 <!-- Left Section -->
                 <div class="flex-1 flex justify-start transform text-red-500 opacity-70">
                     <button
-                        class="rounded-lg border-red-500 border-2 w-32 h-12 self-center flex gap-2 items-center justify-center font-bold"
+                        class="rounded-lg border-red-500 border-2 w-32 h-12 self-center flex gap-2 items-center justify-center font-bold "
                         @click="handleLeave()">
                         <Icon icon="streamline:interface-logout-arrow-exit-frame-leave-logout-rectangle-right" />
                         <div>Leave</div>
@@ -386,7 +388,7 @@ onMounted(() => {
                 <div
                     class="hidden p-4 relative rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
                     <div class="flex">
-                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
+                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400 hidden"
                             @click="showActiveStudents = !showActiveStudents">
                             <!-- Conditional icon rendering based on showActiveStudents -->
                             <Icon
@@ -412,9 +414,9 @@ onMounted(() => {
                         </div>
 
                     </div>
-                    <div class="flex flex-col gap-3 min-h-[55vh] overflow-y-auto hidden-scrollbar"
+                    <div class="flex flex-col gap-3 min-h-[65vh] overflow-y-auto hidden-scrollbar"
                         v-if="showActiveStudents">
-                        <div class="flex flex-col gap-3 max-h-[55vh] overflow-y-auto hidden-scrollbar">
+                        <div class="flex flex-col gap-3 max-h-[65vh] overflow-y-auto hidden-scrollbar">
                             <div v-for="student in activeStudents" :key="student.id"
                                 class="flex items-center gap-4 bg-[#295d90] p-4 rounded-lg shadow-md cursor-pointer transition hover:bg-[#3b76ad]"
                                 @click="awardPoint(student.id)"

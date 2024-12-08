@@ -11,8 +11,8 @@ const goToTextColorPage = () => {
     router.push(`/learn/${sectionId}/text-color`);
 };
 
-const showActiveStudents = ref(false);
-const showInactiveStudents = ref(false);
+const showActiveStudents = ref(true);
+const showInactiveStudents = ref(true);
 
 const isModalOpen = ref(false);
 const LearnModal = ref(false);
@@ -146,11 +146,32 @@ const handleLogout = () => {
 const handleLeave = async () => {
     const data = {
         user_id: userId.value
+    };
+
+    try {
+        // Save the keys you want to preserve
+        const selectedSectionId = localStorage.getItem('selectedSectionId');
+        const userData = localStorage.getItem('userData');
+        const selectedSectionName = localStorage.getItem('selectedSectionName');
+
+        // Clear the localStorage
+        localStorage.clear();
+
+        // Restore the preserved keys
+        if (selectedSectionId) localStorage.setItem('selectedSectionId', selectedSectionId);
+        if (userData) localStorage.setItem('userData', userData);
+        if (selectedSectionName) localStorage.setItem('selectedSectionName', selectedSectionName);
+
+        // Call the logout API
+        await apiServices.logout(data);
+
+        // Redirect to the initial route
+        router.push('/');
+    } catch (error) {
+        console.error('Error during logout:', error);
     }
-    const response = await apiServices.logout(data);
-    localStorage.clear();
-    router.push('/')
-}
+};
+
 
 const openSettings = async () => {
     LearnModal.value = true;
@@ -337,13 +358,13 @@ onMounted(() => {
                         class="p-4 rounded-lg shadow-lg relative bg-[#274461] bg-opacity-70 h-full flex  flex-col justify-center ">
                         <div>
                             <div class="flex w-full gap-2">
-                                <button @click="resetButton" :class="[
+                                <!-- <button @click="resetButton" :class="[
                                     'text-white rounded-lg p-2 w-full mt-2'
-                                ]">
+                                ]" :disabled="!firstBuzzer">
                                     Reset
-                                </button>
+                                </button> -->
 
-                                <button :disabled="!firstBuzzer" @click="resetButton" :class="[
+                                <button @click="resetButton" :class="[
                                     'text-white rounded-lg p-2 w-full mt-2',
                                     firstBuzzer ? 'bg-[#0ed494]' : 'bg-gray-400 cursor-not-allowed'
                                 ]">
@@ -358,9 +379,10 @@ onMounted(() => {
 
                 </div>
                 <div
-                    class="p-4 relative rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    class="p-4 relative rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70  xl:block xl:mt-0 mt-3 min-h-[100%]">
                     <div class="flex">
-                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
+                        <button
+                            class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400 xl:hidden flex"
                             @click="showActiveStudents = !showActiveStudents">
                             <!-- Conditional icon rendering based on showActiveStudents -->
                             <Icon
@@ -387,9 +409,9 @@ onMounted(() => {
                         </div>
 
                     </div>
-                    <div class="flex flex-col gap-3 min-h-[55vh] overflow-y-auto hidden-scrollbar"
+                    <div class="flex flex-col gap-3 min-h-[100%] overflow-y-auto hidden-scrollbar"
                         v-if="showActiveStudents">
-                        <div class="flex flex-col gap-3 max-h-[55vh] overflow-y-auto hidden-scrollbar">
+                        <div class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto hidden-scrollbar">
                             <div v-for="student in activeStudents" :key="student.id"
                                 class="flex items-center gap-4 bg-[#295d90] p-4 rounded-lg shadow-md cursor-pointer transition hover:bg-[#3b76ad]"
                                 @click="awardPoint(student.id)"
@@ -429,9 +451,10 @@ onMounted(() => {
 
                 </div>
                 <div
-                    class="p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70 h-full xl:block xl:mt-0 mt-3">
+                    class="p-4 rounded-lg  relative shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%]  bg-[#274461] bg-opacity-70  xl:block xl:mt-0 mt-3 min-h-[100%] ">
                     <div class="flex">
-                        <button class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400"
+                        <button
+                            class="absolute top-3 right-3 text-white rounded-full hover:text-gray-400 xl:hidden flex"
                             @click="showInactiveStudents = !showInactiveStudents">
                             <!-- Conditional icon rendering based on showInactiveStudents -->
                             <Icon
@@ -456,9 +479,8 @@ onMounted(() => {
                         </div>
 
                     </div>
-                    <div v-if="showInactiveStudents"
-                        class="flex flex-col gap-3 min-h-[55vh] overflow-y-auto hidden-scrollbar">
-                        <div class="flex flex-col gap-3 max-h-[55vh] overflow-y-auto hidden-scrollbar">
+                    <div v-if="showInactiveStudents" class="flex flex-col gap-3 min-h-[100%] ">
+                        <div class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto hidden-scrollbar">
                             <div v-for="student in inactiveStudents" :key="student.id"
                                 class="relative flex items-center gap-4 bg-[#3f566c] p-4 rounded-lg shadow-md cursor-pointer transition"
                                 @click="awardPoint(student.id)"

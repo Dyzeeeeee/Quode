@@ -13,18 +13,30 @@
             <div class="flex flex-col md:flex-row gap-3">
                 <div
                     class="mt-4 flex justify-center relative xl:max-w-52 xl:max-h-52 max-h-40 max-w-40 self-center rounded-full p-4 bg-[#274461]">
+                    <div v-if="isAvatarLoading"
+                        class="absolute inset-0 flex justify-center items-center bg-[#274461] rounded-full w-full h-full p-4">
+                        <div
+                            class=" border-[#0ed494] border-[5px] w-full h-full rounded-full flex items-center justify-center">
+                            <Icon icon="eos-icons:loading" class="h-20 w-20 text-gray-500 animate-spin" />
+                        </div>
+                    </div>
+
+                    <!-- Avatar Image -->
                     <img :src="avatarUrl" alt="Random Character"
-                        class="w-full h-full object-cover rounded-full border-[#0ed494] border-[5px] bg-emerald-400" />
-                    <button @click="toggleMenu"
-                        class="absolute bottom-2 left-0 mb-2 p-1 bg-[#274461] text-white rounded-full">
-                        <Icon icon="material-symbols:styler-outline"
-                            class="xl:h-[45px] xl:w-[45px] h-[35px] w-[35px]" />
-                    </button>
-                    <button @click="randomizeSeed"
-                        class="absolute bottom-2 right-0 mb-2 p-1 bg-[#274461] text-white rounded-full">
-                        <Icon icon="game-icons:perspective-dice-six-faces-random"
-                            class="xl:h-[45px] xl:w-[45px] h-[35px] w-[35px]" />
-                    </button>
+                        class="w-full h-full object-cover rounded-full border-[#0ed494] border-[5px] bg-emerald-400"
+                        @load="isAvatarLoading = false" @error="handleAvatarError" />
+                    <div v-if="!isAvatarLoading">
+                        <button @click="toggleMenu"
+                            class="absolute bottom-2 left-0 mb-2 p-1 bg-[#274461] text-white rounded-full">
+                            <Icon icon="material-symbols:styler-outline"
+                                class="xl:h-[45px] xl:w-[45px] h-[35px] w-[35px]" />
+                        </button>
+                        <button @click="randomizeSeed"
+                            class="absolute bottom-2 right-0 mb-2 p-1 bg-[#274461] text-white rounded-full">
+                            <Icon icon="game-icons:perspective-dice-six-faces-random"
+                                class="xl:h-[45px] xl:w-[45px] h-[35px] w-[35px]" />
+                        </button>
+                    </div>
                 </div>
                 <div class="flex flex-col gap-3 justify-center w-full">
                     <div>
@@ -90,6 +102,24 @@
             </button>
         </div>
     </div>
+    <div v-if="pwModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-[#274461] bg-opacity-90 p-6 rounded-lg shadow-lg w-[90vw] xl:w-[30%]">
+            <!-- Modal Header -->
+            <h2 class="text-white text-2xl font-bold mb-4">Accessing Admin Account</h2>
+
+            <!-- Password Input -->
+            <div class="mb-4">
+                <label for="password" class="block text-white font-semibold mb-2">Input Password</label>
+                <input id="password" type="password" v-model="password"
+                    class="w-full p-2 rounded-md bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0ed494] text-gray-800"
+                    placeholder="Enter admin password" />
+            </div>
+
+        </div>
+    </div>
+
+
+
 </template>
 
 
@@ -99,14 +129,26 @@ import { useRouter } from 'vue-router';
 import V3Services from '@/services/V3Services';
 
 import { useToast } from "primevue/usetoast";
-const toast = useToast();
 
+
+const toast = useToast();
+const password = ref('');
+const pwModal = ref(false);
 // Services and Router
 const apiServices = new V3Services();
 const router = useRouter();
 const goToGForms = () => {
     window.open('https://docs.google.com/forms/d/e/1FAIpQLSfNgm7617fV5wHY7ymXtxPZcslYzaLhzoQf_C_jp9AVNEjZ-w/viewform?usp=sharing', '_blank');
 };
+
+watch(password, (newPassword) => {
+    const selectedSectionId = localStorage.getItem('selectedSectionId');
+
+    if (pwModal.value && newPassword === '0000') {
+        pwModal.value = false; // Close the modal
+        router.push({ name: 'buzzer', params: { id: selectedSectionId } }); // Redirect
+    }
+});
 // Constants
 const AVATAR_STYLES = {
     adventurer: 'adventurer',
@@ -146,11 +188,21 @@ const defaultAvatar = 'https://api.dicebear.com/9.x/big-ears-neutral/svg?seed=ra
 // State
 const name = ref('');
 const seeder = ref(name.value);
-const avatarUrl = ref('');
+const avatarUrl = ref(
+    localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).avatar : null
+);
+
 const selectedStyle = ref(AVATAR_STYLES.micah);
 const selectedSection = ref(localStorage.getItem('selectedSectionId') || null);
-const selectedName = ref(localStorage.getItem('userId') || null);
+const selectedName = ref(
+    localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).id : null
+);
+const isAvatarLoading = ref(true); // Loading state for the avatar
 
+const handleAvatarError = () => {
+    isAvatarLoading.value = false;
+    avatarUrl.value = 'https://via.placeholder.com/150'; // Fallback image
+};
 const sectionGrouped = ref([]);
 const isMenuOpen = ref(false);
 
@@ -195,9 +247,14 @@ const handleJoin = async () => {
         if (!selectedSectionId) {
             throw new Error("No section selected.");
         }
+        if (response.data.role == 'admin') {
+            pwModal.value = true;
 
+        } else {
+            router.push({ name: 'buzzer', params: { id: selectedSectionId } });
+
+        }
         // Navigate to the buzzer page with the selected section ID
-        router.push({ name: 'buzzer', params: { id: selectedSectionId } });
     } catch (error) {
         const errorMessage = error.response?.data?.message || error.message;
 
@@ -224,6 +281,7 @@ const getSectionGrouping = async () => {
                 avatar: user.avatar || defaultAvatar,
             })),
         }));
+        console.log(sectionGrouped.value)
     } catch (error) {
         console.error('Error fetching section grouping:', error.message);
     }
