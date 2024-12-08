@@ -129,7 +129,7 @@
     <div v-if="pwModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         <div class="bg-[#274461] bg-opacity-90 p-6 rounded-lg shadow-lg w-[90vw] xl:w-[30%]">
             <!-- Modal Header -->
-            <h2 class="text-white text-2xl font-bold mb-4">Accessing Admin Account</h2>
+            <h2 class="text-white text-2xl font-bold mb-4">Accessing an Admin Account</h2>
 
             <!-- Password Input -->
             <div class="mb-4">
@@ -139,6 +139,7 @@
                     placeholder="Enter admin password" />
             </div>
 
+            <button class="border-red-500 text-red-500  rounded-lg p-2 w-full" @click="pwModal = false">Close</button>
         </div>
     </div>
 
