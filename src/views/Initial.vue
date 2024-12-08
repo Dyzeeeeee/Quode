@@ -62,6 +62,30 @@
                             </option>
                         </select>
                     </div>
+                    <div>
+                        <div class="font-bold mb-2 text-xl">Device Type</div>
+                        <div class="flex gap-2">
+                            <button @click="selectDevice('Phone')"
+                                class="rounded-full border-2 w-16 h-16 flex items-center justify-center"
+                                :class="{ 'bg-blue-500 text-white': deviceType === 'Phone' }">
+                                <Icon icon="bx:mobile" height="40" />
+                            </button>
+
+                            <!-- Desktop Button -->
+                            <button @click="() => { selectDevice('Desktop'); pcModal = true; }"
+                                class="rounded-full border-2 w-16 h-16 flex items-center justify-center"
+                                :class="{ 'bg-blue-500 text-white': deviceType === 'Desktop' }">
+                                <Icon icon="tdesign:desktop" height="40" />
+                            </button>
+
+                            <!-- Laptop Button -->
+                            <button @click="selectDevice('Laptop')"
+                                class="rounded-full border-2 w-16 h-16 flex items-center justify-center"
+                                :class="{ 'bg-blue-500 text-white': deviceType === 'Laptop' }">
+                                <Icon icon="icon-park-outline:laptop" height="40" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="mt-3">
@@ -118,6 +142,28 @@
         </div>
     </div>
 
+    <div v-if="pcModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-[#274461] bg-opacity-90 p-6 rounded-lg shadow-lg w-[90vw] xl:w-[30%]">
+            <!-- Modal Header -->
+            <h2 class="text-white text-2xl font-bold mb-4">Which PC are you using?</h2>
+
+            <!-- Password Input -->
+            <div class="mb-4">
+                <select v-model="selectedPcNumber"
+                    class="w-full p-2 border border-gray-300 rounded-md bg-gray-400 bg-opacity-50 text-white text-xl font-bold">
+                    <option disabled value="">PC Number</option>
+                    <option v-for="n in 40" :key="n" :value="n" class="text-gray-700">
+                        {{ n }}
+                    </option>
+                </select>
+
+            </div>
+            <div>
+                <button class="bg-emerald-500 rounded-lg p-3 w-full" @click="pcModal = false">Confirm</button>
+            </div>
+
+        </div>
+    </div>
 
 
 </template>
@@ -130,10 +176,16 @@ import V3Services from '@/services/V3Services';
 
 import { useToast } from "primevue/usetoast";
 
+const selectedPcNumber = ref(null);
+const deviceType = ref(null);
 
-const toast = useToast();
+function selectDevice(type) {
+    deviceType.value = type;
+    console.log('Selected device:', type);
+} const toast = useToast();
 const password = ref('');
 const pwModal = ref(false);
+const pcModal = ref(false);
 // Services and Router
 const apiServices = new V3Services();
 const router = useRouter();
@@ -146,7 +198,7 @@ watch(password, (newPassword) => {
 
     if (pwModal.value && newPassword === '0000') {
         pwModal.value = false; // Close the modal
-        router.push({ name: 'buzzer', params: { id: selectedSectionId } }); // Redirect
+        router.push({ name: 'user', params: { id: selectedSectionId } }); // Redirect
     }
 });
 // Constants
@@ -197,6 +249,7 @@ const selectedSection = ref(localStorage.getItem('selectedSectionId') || null);
 const selectedName = ref(
     localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).id : null
 );
+
 const isAvatarLoading = ref(true); // Loading state for the avatar
 
 const handleAvatarError = () => {
@@ -230,7 +283,7 @@ const randomizeSeed = () => {
 const showGform = ref(false)
 
 const handleJoin = async () => {
-    const userData = { id: selectedName.value, avatar: avatarUrl.value };
+    const userData = { id: selectedName.value, avatar: avatarUrl.value, device: deviceType.value, pc_number: selectedPcNumber.value };
 
     // Store user data locally
     localStorage.setItem('userData', JSON.stringify(userData));
@@ -243,6 +296,16 @@ const handleJoin = async () => {
         // Check if login was successful
         localStorage.setItem('role', response.data.role);
 
+        const selectedUser = sectionGrouped.value
+            .flatMap(section => section.users)
+            .find(user => user.id === selectedName.value);
+
+        if (selectedUser) {
+            localStorage.setItem('userName', selectedUser.name);
+        } else {
+            console.warn('User not found in section grouping.');
+        }
+
         const selectedSectionId = localStorage.getItem('selectedSectionId');
         if (!selectedSectionId) {
             throw new Error("No section selected.");
@@ -251,7 +314,7 @@ const handleJoin = async () => {
             pwModal.value = true;
 
         } else {
-            router.push({ name: 'buzzer', params: { id: selectedSectionId } });
+            router.push({ name: 'user', params: { id: selectedSectionId } });
 
         }
         // Navigate to the buzzer page with the selected section ID
