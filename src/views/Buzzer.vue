@@ -237,14 +237,7 @@ const awardPoint = async (id) => {
     try {
         // Call the API service to award the score
         const response = await apiServices.awardScore(data);
-
-        if (response.status === 200) {
-            // Handle successful response (if needed)
             alert("Point awarded successfully.");
-        } else {
-            // Handle error response (if needed)
-            alert("Failed to award point. Please try again.");
-        }
     } catch (error) {
         // Handle unexpected errors
         console.error("Error awarding point:", error);
