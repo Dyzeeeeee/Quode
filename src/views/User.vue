@@ -328,9 +328,15 @@ onBeforeUnmount(() => {
 
                         </div>
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
-                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
+                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden">
                                 <a href="pulsar.pdf" download="pulsar-guide.pdf"
                                     class="flex gap-2 items-center text-white">
+                                    <Icon icon="material-symbols:download-sharp" height="20" />
+                                    <div>Download guide</div>
+                                </a>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden">
+                                <a href="pulsar.pdf" class="flex gap-2 items-center text-white">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
                                 </a>
@@ -433,9 +439,15 @@ onBeforeUnmount(() => {
 
                         </div>
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
-                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
-                                <a href="github.pdf" download="pulsar-guide.pdf"
+                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden">
+                                <a href="github.pdf" download="github-guide.pdf"
                                     class="flex gap-2 items-center text-white">
+                                    <Icon icon="material-symbols:download-sharp" height="20" />
+                                    <div>Download guide</div>
+                                </a>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden">
+                                <a href="github.pdf" class="flex gap-2 items-center text-white">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
                                 </a>
