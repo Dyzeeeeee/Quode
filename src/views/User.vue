@@ -35,6 +35,28 @@ const isActivityNotDone = (activityId) => {
     return activity.is_done == '0'; // '0' means not done
 };
 
+const isActivityNotHelp = (activityId) => {
+    // Check if userActivities is empty
+    if (!userActivities.value || userActivities.value.length === 0) {
+        return true; // Default to "not done" if no activities are loaded yet
+    }
+
+    // Find the activity by activity_id in the data array
+    const activity = userActivities.value.find(act => act.activity_id == activityId);
+
+    // Log the activity object and its is_done value
+    console.log('Activity:', activity);
+    console.log('requires_help:', activity ? activity.requires_help : 'Activity not found');
+
+    // If the activity does not exist, assume it is not done
+    if (!activity) {
+        return true;
+    }
+
+    // Check if the activity is not done
+    return activity.requires_help == '0'; // '0' means not done
+};
+
 
 
 
@@ -95,6 +117,7 @@ const userName = ref(localStorage.getItem('userName') || '');
 const sectionName = ref(localStorage.getItem('selectedSectionName') || '');
 
 const isDoneMap = ref({});  // Object to store is_done based on activity_id
+const requested = ref({});  // Object to store is_done based on activity_id
 
 const markAsDone = async () => {
     if (loading.value) return; // Prevent duplicate clicks
@@ -128,6 +151,75 @@ const markAsDone = async () => {
         console.error('Error while marking activity as done:', error);
     } finally {
         loading.value = false; // Reset loading state
+    }
+};
+
+const helpLoading = ref(false);
+const cancelHelpLoading = ref(false);
+
+const requestForHelp = async () => {
+    if (helpLoading.value) return; // Prevent duplicate clicks
+    helpLoading.value = true; // Set helpLoading state to true
+
+    const data = {
+        user_id: userId.value,
+        activity_id: selectedActivity.value.id
+    };
+
+    console.log('Selected activity ID:', selectedActivity.value.id);
+
+    try {
+        // Make the API call and wait for the response
+        const response = await apiServices.requestForHelp(data);
+        if (response && response.requires_help !== undefined) {
+            requested.value[selectedActivity.value.id] = response.requires_help;
+            console.log("Activity unmarked, requires_help for activity_id:", selectedActivity.value.id, "requires_help:", requested.value[selectedActivity.value.id]);
+
+            await getUserActivities(userId.value);
+            unmarkLoading.value = false; // Reset loading state
+
+        } else {
+            console.error('Error: is_done not found in the response.');
+        }
+        // Debugging: log the response to see the actual structure
+        console.log('API Response:', response);
+    } catch (error) {
+        console.error('Error while marking activity as done:', error);
+    } finally {
+        helpLoading.value = false; // Reset loading state
+    }
+};
+
+const cancelRequestForHelp = async () => {
+    if (cancelHelpLoading.value) return; // Prevent duplicate clicks
+    cancelHelpLoading.value = true; // Set cancelHelpLoading state to true
+
+    const data = {
+        user_id: userId.value,
+        activity_id: selectedActivity.value.id
+    };
+
+    console.log('Selected activity ID:', selectedActivity.value.id);
+
+    try {
+        // Make the API call and wait for the response
+        const response = await apiServices.cancelRequestForHelp(data);
+        if (response && response.requires_help !== undefined) {
+            requested.value[selectedActivity.value.id] = response.requires_help;
+            console.log("Activity unmarked, requires_help for activity_id:", selectedActivity.value.id, "requires_help:", requested.value[selectedActivity.value.id]);
+
+            await getUserActivities(userId.value);
+            unmarkLoading.value = false; // Reset loading state
+
+        } else {
+            console.error('Error: is_done not found in the response.');
+        }
+        // Debugging: log the response to see the actual structure
+        console.log('API Response:', response);
+    } catch (error) {
+        console.error('Error while marking activity as done:', error);
+    } finally {
+        cancelHelpLoading.value = false; // Reset loading state
     }
 };
 
@@ -206,16 +298,17 @@ const handleLeave = async () => {
         console.error('Error during logout:', error);
     }
 };
+const lockScrollForLargeScreens = () => {
+    if (window.matchMedia("(min-width: 768px)").matches) {
+        // Lock scrolling for screens 768px and above
+        document.body.style.overflow = lockScroll.value ? "hidden" : "";
+    } else {
+        // Allow scrolling for smaller screens
+        document.body.style.overflow = "";
+    }
+};
 onMounted(() => {
-    const lockScrollForLargeScreens = () => {
-        if (window.matchMedia("(min-width: 768px)").matches) {
-            // Lock scrolling for screens 768px and above
-            document.body.style.overflow = lockScroll.value ? "hidden" : "";
-        } else {
-            // Allow scrolling for smaller screens
-            document.body.style.overflow = "";
-        }
-    };
+
 
     // Run on initial load
     lockScrollForLargeScreens();
@@ -306,9 +399,19 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="p-3 flex justify-between flex-col xl:flex-row">
                         <div class="flex gap-2 flex-col xl:flex-row">
-                            <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center">
-                                <Icon icon="mdi:help-outline" height="20" />
-                                <div>Request for Help</div>
+                            <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center" @click="requestForHelp"
+                                :disabled="helpLoading" v-if="isActivityNotHelp(1) || !userActivities">
+                                <Icon v-if="!helpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!helpLoading">Request for Help</div>
+                                <div v-else>Loading...</div>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-orange-600 p-2 items-center"
+                                @click="cancelRequestForHelp" :disabled="cancelHelpLoading" v-else>
+                                <Icon v-if="!cancelHelpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!cancelHelpLoading">Cancel Request</div>
+                                <div v-else>Loading...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-emerald-500 p-2 items-center" @click="markAsDone"
                                 :disabled="loading" v-if="isActivityNotDone(1) || !userActivities">

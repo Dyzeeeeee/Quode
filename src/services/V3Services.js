@@ -171,4 +171,41 @@ export default class V3Services {
       throw error; // Rethrow to be caught in the component
     }
   }
+
+  async requestForHelp(data) {
+    try {
+      // Make the API request
+      const response = await apiRequest("post", this.basePath, "help", data);
+
+      // Return the response object so it can be used in the component
+      return response;
+    } catch (error) {
+      console.error(
+        "Error occurred while marking the activity as done:",
+        error
+      );
+      throw error; // Rethrow to be caught in the component
+    }
+  }
+
+  async cancelRequestForHelp(data) {
+    try {
+      // Make the API request
+      const response = await apiRequest(
+        "post",
+        this.basePath,
+        "cancel-help",
+        data
+      );
+
+      // Return the response object so it can be used in the component
+      return response;
+    } catch (error) {
+      console.error(
+        "Error occurred while marking the activity as done:",
+        error
+      );
+      throw error; // Rethrow to be caught in the component
+    }
+  }
 }
