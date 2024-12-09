@@ -404,28 +404,28 @@ onBeforeUnmount(() => {
                                 <Icon v-if="!helpLoading" icon="mdi:help-outline" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!helpLoading">Request for Help</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Requesting...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-orange-600 p-2 items-center"
                                 @click="cancelRequestForHelp" :disabled="cancelHelpLoading" v-else>
                                 <Icon v-if="!cancelHelpLoading" icon="mdi:help-outline" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!cancelHelpLoading">Cancel Request</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Cancelling...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-emerald-500 p-2 items-center" @click="markAsDone"
                                 :disabled="loading" v-if="isActivityNotDone(1) || !userActivities">
                                 <Icon v-if="!loading" icon="iconamoon:check-bold" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!loading">Mark as Done</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Marking...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-red-500 p-2 items-center" @click="unmarkAsDone"
                                 :disabled="unmarkLoading" v-else>
                                 <Icon v-if="!unmarkLoading" icon="material-symbols:undo" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!unmarkLoading">Unmark as Done</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Unmarking...</div>
                             </button>
 
 
@@ -467,23 +467,33 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="p-3 flex justify-between flex-col xl:flex-row">
                         <div class="flex gap-2 flex-col xl:flex-row">
-                            <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center">
-                                <Icon icon="mdi:help-outline" height="20" />
-                                <div>Request for Help</div>
+                            <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center" @click="requestForHelp"
+                                :disabled="helpLoading" v-if="isActivityNotHelp(2) || !userActivities">
+                                <Icon v-if="!helpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!helpLoading">Request for Help</div>
+                                <div v-else>Requesting...</div>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-orange-600 p-2 items-center"
+                                @click="cancelRequestForHelp" :disabled="cancelHelpLoading" v-else>
+                                <Icon v-if="!cancelHelpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!cancelHelpLoading">Cancel Request</div>
+                                <div v-else>Cancelling...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-emerald-500 p-2 items-center" @click="markAsDone"
                                 :disabled="loading" v-if="isActivityNotDone(2) || !userActivities">
                                 <Icon v-if="!loading" icon="iconamoon:check-bold" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!loading">Mark as Done</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Marking...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-red-500 p-2 items-center" @click="unmarkAsDone"
                                 :disabled="unmarkLoading" v-else>
                                 <Icon v-if="!unmarkLoading" icon="material-symbols:undo" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!unmarkLoading">Unmark as Done</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Unmarking...</div>
                             </button>
 
 
@@ -520,23 +530,33 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="p-3 flex justify-between flex-col xl:flex-row">
                         <div class="flex gap-2 flex-col xl:flex-row">
-                            <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center">
-                                <Icon icon="mdi:help-outline" height="20" />
-                                <div>Request for Help</div>
+                            <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center" @click="requestForHelp"
+                                :disabled="helpLoading" v-if="isActivityNotHelp(3) || !userActivities">
+                                <Icon v-if="!helpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!helpLoading">Request for Help</div>
+                                <div v-else>Requesting...</div>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-orange-600 p-2 items-center"
+                                @click="cancelRequestForHelp" :disabled="cancelHelpLoading" v-else>
+                                <Icon v-if="!cancelHelpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!cancelHelpLoading">Cancel Request</div>
+                                <div v-else>Cancelling...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-emerald-500 p-2 items-center" @click="markAsDone"
                                 :disabled="loading" v-if="isActivityNotDone(3) || !userActivities">
                                 <Icon v-if="!loading" icon="iconamoon:check-bold" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!loading">Mark as Done</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Marking...</div>
                             </button>
                             <button class="flex gap-2 rounded-lg bg-red-500 p-2 items-center" @click="unmarkAsDone"
                                 :disabled="unmarkLoading" v-else>
                                 <Icon v-if="!unmarkLoading" icon="material-symbols:undo" height="20" />
                                 <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
                                 <div v-if="!unmarkLoading">Unmark as Done</div>
-                                <div v-else>Loading...</div>
+                                <div v-else>Unmarking...</div>
                             </button>
 
 
