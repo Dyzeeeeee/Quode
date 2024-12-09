@@ -443,6 +443,7 @@ onBeforeUnmount(() => {
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
                                 </a>
+
                             </button>
 
                             <button @click="previewPulsar = !previewPulsar"
@@ -452,7 +453,7 @@ onBeforeUnmount(() => {
                             </button>
                         </div>
                     </div>
-                    <div class="p-3  h-[55vh]xl:block hidden rounded-rounded">
+                    <div class="p-3  h-[55vh] xl:block hidden rounded-rounded">
                         <iframe src="/src/assets/files/pulsar.pdf" width="100%" height="100%" class="rounded"
                             v-if="previewPulsar"></iframe>
                     </div>
@@ -514,9 +515,58 @@ onBeforeUnmount(() => {
                             </button> -->
                         </div>
                     </div>
-                    <div class="p-3  h-[55vh]xl:block hidden rounded-rounded">
-                        <iframe src="pulsar.pdf" width="100%" height="100%" class="rounded"
-                            v-if="previewPulsar"></iframe>
+                    <div class="p-3  h-[55vh] xl:block hidden rounded-rounded">
+                        <div class="font-bold text-2xl">Sample Outputs</div>
+                        <div class="p-2 space-y-2 flex flex-col">
+                            <div class="flex gap-2">
+                                <div class="flex w-full border-white rounded-lg border-2 p-2 gap-2">
+                                    <div class="text-xl  p-3 hover:bg- rounded-lg w-full">
+                                        Sample
+                                        1
+                                    </div>
+                                    <button
+                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center hidden">
+                                        <a href="https://jkennethdomingo.github.io/DidYouLikeHerInTheMorning/"
+                                            target="_blank" class="flex gap-2 items-center text-white">
+                                            <Icon icon="material-symbols:download-sharp" height="20" />
+                                            <div>Visit Link</div>
+                                        </a>
+                                    </button>
+                                    <button
+                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden">
+                                        <a href="dylh.zip" download="dylh.zip"
+                                            class="flex gap-2 items-center text-white">
+                                            <Icon icon="material-symbols:download-sharp" height="20" />
+                                            <div>Download Sample</div>
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex w-full border-white rounded-lg border-2 p-2 gap-2">
+                                    <div class="text-xl  p-3 hover:bg- rounded-lg w-full">
+                                        Sample
+                                        2
+                                    </div>
+                                    <button
+                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center hidden">
+                                        <a href="https://lyyyyy23.github.io/cardigan/" target="_blank"
+                                            class="flex gap-2 items-center text-white">
+                                            <Icon icon="material-symbols:download-sharp" height="20" />
+                                            <div>Visit Link</div>
+                                        </a>
+                                    </button>
+                                    <button
+                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden">
+                                        <a href="cardigan.zip" download="cardigan.zip"
+                                            class="flex gap-2 items-center text-white">
+                                            <Icon icon="material-symbols:download-sharp" height="20" />
+                                            <div>Download Sample</div>
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -583,8 +633,8 @@ onBeforeUnmount(() => {
                             </button>
                         </div>
                     </div>
-                    <div class="p-3  h-[55vh]xl:block hidden rounded-rounded">
-                        <iframe src="github.pdf" width="100%" height="100%" class="rounded"
+                    <div class="p-3  h-[55vh] xl:block hidden rounded-rounded">
+                        <iframe src="/src/assets/files/github.pdf" width="100%" height="100%" class="rounded"
                             v-if="previewPulsar"></iframe>
                     </div>
 
