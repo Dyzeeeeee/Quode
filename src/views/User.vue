@@ -10,6 +10,24 @@ const router = useRouter();
 
 const avatar = ref('');
 
+function downloadFile2() {
+    const link = document.createElement('a');
+    link.href = '/cardigan.zip'; // File path relative to the public folder
+    link.download = 'cardigan.zip'; // Optional: Rename file on download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+function downloadFile1() {
+    const link = document.createElement('a');
+    link.href = '/dylh.zip'; // File path relative to the public folder
+    link.download = 'dylh.zip'; // Optional: Rename file on download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 const apiServices = new ApiServices();
 const lockScroll = ref(true);
 const selectedActivity = ref(null);
@@ -533,12 +551,10 @@ onBeforeUnmount(() => {
                                         </a>
                                     </button>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden">
-                                        <a href="dylh.zip" download="dylh.zip"
-                                            class="flex gap-2 items-center text-white">
-                                            <Icon icon="material-symbols:download-sharp" height="20" />
-                                            <div>Download Sample</div>
-                                        </a>
+                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden"
+                                        @click="downloadFile1">
+                                        <Icon icon="material-symbols:download-sharp" height="20" />
+                                        <div>Download Sample</div>
                                     </button>
                                 </div>
                             </div>
@@ -557,12 +573,10 @@ onBeforeUnmount(() => {
                                         </a>
                                     </button>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden">
-                                        <a href="cardigan.zip" download="cardigan.zip"
-                                            class="flex gap-2 items-center text-white">
-                                            <Icon icon="material-symbols:download-sharp" height="20" />
-                                            <div>Download Sample</div>
-                                        </a>
+                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden"
+                                        @click="downloadFile2">
+                                        <Icon icon="material-symbols:download-sharp" height="20" />
+                                        <div>Download Sample</div>
                                     </button>
                                 </div>
                             </div>
