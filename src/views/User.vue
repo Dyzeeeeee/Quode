@@ -207,31 +207,46 @@ const handleLeave = async () => {
     }
 };
 onMounted(() => {
-    if (lockScroll.value) {
-        document.body.style.overflow = 'hidden';  // Lock scrolling
-    }
+    const lockScrollForLargeScreens = () => {
+        if (window.matchMedia("(min-width: 768px)").matches) {
+            // Lock scrolling for screens 768px and above
+            document.body.style.overflow = lockScroll.value ? "hidden" : "";
+        } else {
+            // Allow scrolling for smaller screens
+            document.body.style.overflow = "";
+        }
+    };
+
+    // Run on initial load
+    lockScrollForLargeScreens();
+
+    // Listen for screen size changes
+    window.addEventListener("resize", lockScrollForLargeScreens);
+
     getUserActivities(userId.value);
     fetchActivities();
-    const userData = localStorage.getItem('userData');
+
+    const userData = localStorage.getItem("userData");
     if (userData) {
         try {
             const parsedData = JSON.parse(userData);
-            avatar.value = parsedData.avatar || ''; // Default to an empty string if `avatar` is not set
+            avatar.value = parsedData.avatar || ""; // Default to an empty string if `avatar` is not set
         } catch (error) {
-            console.error('Error parsing userData:', error);
+            console.error("Error parsing userData:", error);
         }
     }
-
 });
 
 onBeforeUnmount(() => {
-    document.body.style.overflow = '';
+    document.body.style.overflow = ""; // Reset overflow on unmount
+    window.removeEventListener("resize", lockScrollForLargeScreens);
 });
+
 </script>
 
 
 <template>
-    <div class="flex gap-4 px-4 items-center justify-center min-h-screen bg-[#274461] text-white">
+    <div class="flex gap-4 xl:px-4 items-center justify-center min-h-screen bg-[#274461] text-white">
         <video autoplay muted playsinline
             class="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none xl:flex hidden">
             <source src="@/assets/images/appbg-flip.mp4" type="video/mp4" />
@@ -242,11 +257,11 @@ onBeforeUnmount(() => {
 
         </div> -->
         <div
-            class="bg-[#1c1f23] xl:bg-black border-white border-2 flex flex-col xl:w-[100%] w-full rounded-lg p-4  h-[90vh] gap-3">
+            class="bg-[#1c1f23] xl:bg-black border-white border-2 flex flex-col xl:w-[100%] w-full rounded-lg p-4  xl:h-[90vh] gap-3">
             <div class="flex gap-2 justify-between bg-[#274461] relative rounded-lg">
                 <div class="relative w-full bg-[#274461] rounded-lg p-3 flex-1 flex gap-2">
                     <img :src="avatar" alt="User Avatar"
-                        class="w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
+                        class="self-center w-12 h-12 object-cover rounded-full border-[#0ed494] border-[3px] bg-[#274461]" />
                     <div class="flex flex-col">
                         <div class="self-center text-xl font-bold"> {{ userName }}</div>
                         <div class=" text-sm">{{ sectionName }}</div>
@@ -254,15 +269,15 @@ onBeforeUnmount(() => {
                 </div>
                 <div class="p-3 text-red-400">
                     <button
-                        class="rounded-lg border-red-500 border-2 w-32 h-12 self-center flex gap-2 items-center justify-center font-bold "
+                        class="rounded-lg border-red-500 border-2 xl:w-32 xl:h-12 h-auto w-auto p-2 xl:p-0 self-center flex gap-2 items-center justify-center font-bold "
                         @click="handleLeave()">
                         <Icon icon="streamline:interface-logout-arrow-exit-frame-leave-logout-rectangle-right" />
-                        <div>Leave</div>
+                        <div class="xl:flex hidden">Leave</div>
                     </button>
                 </div>
             </div>
-            <div class="flex gap-3 h-full">
-                <div class="h-full bg-[#274461] relative rounded-lg w-[30%] p-3">
+            <div class="flex gap-3 h-auto xl:h-full flex-wrap">
+                <div class="h-auto xl:h-full bg-[#274461] relative rounded-lg xl:w-[30%] p-3 w-[100%]">
                     <div class="text-2xl font-bold px-3 py-1">Activities</div>
                     <div class="border-white border-2 border-opacity-40 rounded-lg p-3 space-y-2">
                         <!-- Loop through activities -->
@@ -281,14 +296,16 @@ onBeforeUnmount(() => {
 
                     </div>
                 </div>
-                <div class="h-full bg-[#274461] relative rounded-lg flex-1"
+                <div class="xl:h-full h-auto bg-[#274461] relative rounded-lg flex-1"
                     v-if="selectedActivity && selectedActivity.id === '1'">
                     <div class="p-3  rounded">
-                        <div class="text-3xl font-bold">Pulsar</div>
-                        <div class="">Setting up Pulsar</div>
+                        <div class="text-3xl font-bold">Pulsar Setup
+                        </div>
+                        <div class="">Connecting my Github Account to Pulsar
+                        </div>
                     </div>
-                    <div class="p-3 flex justify-between">
-                        <div class="flex gap-2">
+                    <div class="p-3 flex justify-between flex-col xl:flex-row">
+                        <div class="flex gap-2 flex-col xl:flex-row">
                             <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center">
                                 <Icon icon="mdi:help-outline" height="20" />
                                 <div>Request for Help</div>
@@ -310,8 +327,8 @@ onBeforeUnmount(() => {
 
 
                         </div>
-                        <div class="flex gap-2">
-                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center">
+                        <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
                                 <a href="/src/assets/files/pulsar.pdf" download="pulsar-guide.pdf"
                                     class="flex gap-2 items-center text-white">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
@@ -320,28 +337,27 @@ onBeforeUnmount(() => {
                             </button>
 
                             <button @click="previewPulsar = !previewPulsar"
-                                class="flex gap-2 rounded-lg border-2 border-blue-500  text-blue-500 p-2 items-center">
+                                class=" gap-2 rounded-lg border-2 border-blue-500  text-blue-500 p-2 items-center xl:flex hidden">
                                 <Icon icon="lets-icons:view-fill" height="20" />
                                 <div>Preview </div>
                             </button>
                         </div>
                     </div>
-                    <div class="p-3  h-[55vh] rounded-rounded">
+                    <div class="p-3  h-[55vh]xl:block hidden rounded-rounded">
                         <iframe src="/src/assets/files/pulsar.pdf" width="100%" height="100%" class="rounded"
                             v-if="previewPulsar"></iframe>
                     </div>
 
                 </div>
-                <div class="h-full bg-[#274461] relative rounded-lg flex-1"
+                <div class="xl:h-full h-auto bg-[#274461] relative rounded-lg flex-1"
                     v-else-if="selectedActivity && selectedActivity.id === '2'">
                     <div class="p-3  rounded">
-                        <div class="text-3xl font-bold">My Lyrics Page</div>
+                        <div class="text-3xl font-bold">My Lyrics Pages </div>
                         <div class="">Application of HTML and CSS
-
                         </div>
                     </div>
-                    <div class="p-3 flex justify-between">
-                        <div class="flex gap-2">
+                    <div class="p-3 flex justify-between flex-col xl:flex-row">
+                        <div class="flex gap-2 flex-col xl:flex-row">
                             <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center">
                                 <Icon icon="mdi:help-outline" height="20" />
                                 <div>Request for Help</div>
@@ -361,36 +377,40 @@ onBeforeUnmount(() => {
                                 <div v-else>Loading...</div>
                             </button>
 
+
                         </div>
-                        <div class="flex gap-2">
-                            <!-- <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center">
-                                <a href="/src/assets/files/github.pdf" download="pulsar-guide.pdf"
+                        <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
+                            <!-- <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
+                                <a href="/src/assets/files/pulsar.pdf" download="pulsar-guide.pdf"
                                     class="flex gap-2 items-center text-white">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
                                 </a>
                             </button> -->
-                            <!-- <button
-                                class="flex gap-2 rounded-lg border-2 border-blue-500  text-blue-500 p-2 items-center">
+                            <!-- 
+                            <button @click="previewPulsar = !previewPulsar"
+                                class=" gap-2 rounded-lg border-2 border-blue-500  text-blue-500 p-2 items-center xl:flex hidden">
                                 <Icon icon="lets-icons:view-fill" height="20" />
                                 <div>Preview </div>
                             </button> -->
                         </div>
                     </div>
-                    <div class="p-3  h-[55vh] rounded-rounded">
-                        <!-- <iframe src="/src/assets/files/pulsar.pdf" width="100%" height="100%" class="rounded"></iframe> -->
+                    <div class="p-3  h-[55vh]xl:block hidden rounded-rounded">
+                        <iframe src="/src/assets/files/pulsar.pdf" width="100%" height="100%" class="rounded"
+                            v-if="previewPulsar"></iframe>
                     </div>
 
                 </div>
-                <div class="h-full bg-[#274461] relative rounded-lg flex-1"
+                <div class="xl:h-full h-auto bg-[#274461] relative rounded-lg flex-1"
                     v-else-if="selectedActivity && selectedActivity.id === '3'">
                     <div class="p-3  rounded">
-                        <div class="text-3xl font-bold">Github</div>
-                        <div class="">Connecting my Github account to Pulsar
+                        <div class="text-3xl font-bold">Github Deployment
+                        </div>
+                        <div class="">Deploying my lyrics page into Github
                         </div>
                     </div>
-                    <div class="p-3 flex justify-between">
-                        <div class="flex gap-2">
+                    <div class="p-3 flex justify-between flex-col xl:flex-row">
+                        <div class="flex gap-2 flex-col xl:flex-row">
                             <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center">
                                 <Icon icon="mdi:help-outline" height="20" />
                                 <div>Request for Help</div>
@@ -412,23 +432,25 @@ onBeforeUnmount(() => {
 
 
                         </div>
-                        <div class="flex gap-2">
-                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center">
-                                <a href="/src/assets/files/github.pdf" download="github-guide.pdf"
+                        <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
+                                <a href="/src/assets/files/github.pdf" download="pulsar-guide.pdf"
                                     class="flex gap-2 items-center text-white">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
                                 </a>
                             </button>
+
                             <button @click="previewPulsar = !previewPulsar"
-                                class="flex gap-2 rounded-lg border-2 border-blue-500  text-blue-500 p-2 items-center">
+                                class=" gap-2 rounded-lg border-2 border-blue-500  text-blue-500 p-2 items-center xl:flex hidden">
                                 <Icon icon="lets-icons:view-fill" height="20" />
                                 <div>Preview </div>
                             </button>
                         </div>
                     </div>
-                    <div class="p-3  h-[55vh] rounded-rounded">
-                        <iframe src="/src/assets/files/github.pdf" width="100%" height="100%" class="rounded" v-if="previewPulsar"></iframe>
+                    <div class="p-3  h-[55vh]xl:block hidden rounded-rounded">
+                        <iframe src="/src/assets/files/github.pdf" width="100%" height="100%" class="rounded"
+                            v-if="previewPulsar"></iframe>
                     </div>
 
                 </div>

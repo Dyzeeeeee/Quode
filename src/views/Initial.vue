@@ -315,15 +315,23 @@ const handleJoin = async () => {
             pwModal.value = true;
 
         } else {
+            if (deviceType.value == null) {
+                toast.add({
+                    severity: 'warn',
+                    summary: 'Device type',
+                    detail: 'Select the device you are using',
+                    life: 3000,
+                }); return
+            }
             router.push({ name: 'user', params: { id: selectedSectionId } });
 
         }
+
         // Navigate to the buzzer page with the selected section ID
     } catch (error) {
         const errorMessage = error.response?.data?.message || error.message;
 
         console.error('Error logging in user:', errorMessage);
-
         // Show error message using toast
         toast.add({
             severity: 'error',
