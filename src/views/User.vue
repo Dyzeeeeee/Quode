@@ -454,7 +454,7 @@ onBeforeUnmount(() => {
                     </div>
 
                 </div>
-                <div class="h-full bg-[#274461] relative rounded-lg flex-1 gap-3 text-3xl justify-center flex items-center"
+                <div class="h-full bg-[#274461] relative rounded-lg flex-1 gap-3 text-3xl justify-center flex items-center p-5"
                     v-else>
                     <Icon icon="tdesign:gesture-click-filled" height="40" />
                     Select an activity
