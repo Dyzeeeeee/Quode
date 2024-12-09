@@ -470,14 +470,16 @@ onBeforeUnmount(() => {
 
                         </div>
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
-                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden" @click="downloadFile4">
-                             
-                                    <Icon icon="material-symbols:download-sharp" height="20" />
-                                    <div>Download guide</div>
+                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden"
+                                @click="downloadFile4">
+
+                                <Icon icon="material-symbols:download-sharp" height="20" />
+                                <div>Download guide</div>
                             </button>
-                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden" @click="downloadFile4">
-                                    <Icon icon="material-symbols:download-sharp" height="20" />
-                                    <div>Download guide</div>
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden"
+                                @click="downloadFile4">
+                                <Icon icon="material-symbols:download-sharp" height="20" />
+                                <div>Download guide</div>
                             </button>
 
                             <button @click="previewPulsar = !previewPulsar"
@@ -488,7 +490,7 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
                     <div class="p-3  h-[55vh] xl:block hidden rounded-rounded">
-                        <iframe src="/src/assets/files/pulsar.pdf" width="100%" height="100%" class="rounded"
+                        <iframe src="/pulsar.pdf" width="100%" height="100%" class="rounded"
                             v-if="previewPulsar"></iframe>
                     </div>
 
