@@ -329,7 +329,7 @@ onBeforeUnmount(() => {
                         </div>
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
                             <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
-                                <a href="/src/assets/files/pulsar.pdf" download="pulsar-guide.pdf"
+                                <a href="pulsar.pdf" download="pulsar-guide.pdf"
                                     class="flex gap-2 items-center text-white">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
@@ -434,7 +434,7 @@ onBeforeUnmount(() => {
                         </div>
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
                             <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
-                                <a href="/src/assets/files/github.pdf" download="pulsar-guide.pdf"
+                                <a href="github.pdf" download="pulsar-guide.pdf"
                                     class="flex gap-2 items-center text-white">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>

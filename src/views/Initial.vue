@@ -63,7 +63,7 @@
                         </select>
                     </div>
                     <div>
-                        <div class="font-bold mb-2 text-xl">Device Type</div>
+                        <div class="font-bold mb-2 text-xl text-white">Device Type</div>
                         <div class="flex gap-2">
                             <button @click="selectDevice('Phone')"
                                 class="rounded-full border-2 w-16 h-16 flex items-center justify-center"
