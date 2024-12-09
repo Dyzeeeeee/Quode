@@ -663,7 +663,7 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
                     <div class="p-3  h-[55vh] xl:block hidden rounded-rounded">
-                        <iframe src="/src/assets/files/github.pdf" width="100%" height="100%" class="rounded"
+                        <iframe src="/github.pdf" width="100%" height="100%" class="rounded"
                             v-if="previewPulsar"></iframe>
                     </div>
 
