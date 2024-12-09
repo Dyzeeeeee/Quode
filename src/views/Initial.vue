@@ -199,7 +199,7 @@ watch(password, (newPassword) => {
 
     if (pwModal.value && newPassword === '0000') {
         pwModal.value = false; // Close the modal
-        router.push({ name: 'user', params: { id: selectedSectionId } }); // Redirect
+        router.push({ name: 'user', params: { id: selectedSectionId } });
     }
 });
 // Constants
