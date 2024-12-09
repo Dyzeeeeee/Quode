@@ -20,6 +20,26 @@ function downloadFile2() {
 }
 
 
+function downloadFile3() {
+    const link = document.createElement('a');
+    link.href = '/github.pdf'; // File path relative to the public folder
+    link.download = 'github.pdf'; // Optional: Rename file on download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+function downloadFile4() {
+    const link = document.createElement('a');
+    link.href = '/pulsar.pdf'; // File path relative to the public folder
+    link.download = 'pulsar.pdf'; // Optional: Rename file on download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
 function downloadFile1() {
     const link = document.createElement('a');
     link.href = '/dylh.zip'; // File path relative to the public folder
@@ -28,6 +48,7 @@ function downloadFile1() {
     link.click();
     document.body.removeChild(link);
 }
+
 const apiServices = new ApiServices();
 const lockScroll = ref(true);
 const selectedActivity = ref(null);
@@ -449,19 +470,14 @@ onBeforeUnmount(() => {
 
                         </div>
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
-                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden">
-                                <a href="pulsar.pdf" download="pulsar-guide.pdf"
-                                    class="flex gap-2 items-center text-white">
+                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden" @click="downloadFile4">
+                             
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
-                                </a>
                             </button>
-                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden">
-                                <a href="pulsar.pdf" class="flex gap-2 items-center text-white">
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden" @click="downloadFile4">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
-                                </a>
-
                             </button>
 
                             <button @click="previewPulsar = !previewPulsar"
@@ -626,18 +642,15 @@ onBeforeUnmount(() => {
 
                         </div>
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
-                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden">
-                                <a href="github.pdf" download="github-guide.pdf"
-                                    class="flex gap-2 items-center text-white">
-                                    <Icon icon="material-symbols:download-sharp" height="20" />
-                                    <div>Download guide</div>
-                                </a>
+                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden"
+                                @click="downloadFile3">
+                                <Icon icon="material-symbols:download-sharp" height="20" />
+                                <div>Download guide</div>
                             </button>
-                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden">
-                                <a href="github.pdf" class="flex gap-2 items-center text-white">
-                                    <Icon icon="material-symbols:download-sharp" height="20" />
-                                    <div>Download guide</div>
-                                </a>
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden"
+                                @click="downloadFile3">
+                                <Icon icon="material-symbols:download-sharp" height="20" />
+                                <div>Download guide</div>
                             </button>
 
                             <button @click="previewPulsar = !previewPulsar"
