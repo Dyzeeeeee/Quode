@@ -41,8 +41,8 @@ function downloadFile4() {
 
 function downloadFile5() {
     const link = document.createElement('a');
-    link.href = '/song.pdf'; // File path relative to the public folder
-    link.download = 'song.pdf'; // Optional: Rename file on download
+    link.href = '/song.zip'; // File path relative to the public folder
+    link.download = 'song.zip'; // Optional: Rename file on download
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
