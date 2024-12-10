@@ -39,6 +39,15 @@ function downloadFile4() {
     document.body.removeChild(link);
 }
 
+function downloadFile5() {
+    const link = document.createElement('a');
+    link.href = '/song.pdf'; // File path relative to the public folder
+    link.download = 'song.pdf'; // Optional: Rename file on download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 
 function downloadFile1() {
     const link = document.createElement('a');
@@ -427,6 +436,91 @@ onBeforeUnmount(() => {
                         </div>
 
                     </div>
+                    <div class="text-2xl font-bold px-3 py-1">Quiz</div>
+                    <a href="https://bit.ly/4ff3AQq">
+                    <div
+                            :class="`bg-[#435b72] p-3 rounded flex justify-between cursor-pointer  ${selectedActivity === activity ? 'border-2 border-emerald-500 bg-[#648eb6]' : ''}`"
+                            >
+                            <div>
+                                <div class="text-lg font-medium">Madaling Quiz 1</div>
+                                <div class="text-sm">HTML and CSS quiz
+                                    MADALI LANG TO PRAMIS.</div>
+                            </div>
+                            <!-- <div class="self-center">
+                                <img :src="activity.imageUrl" alt=""
+                                    class="rounded-full h-12 w-12 bg-white border-[${activity.borderColor}] border-2">
+                            </div> -->
+                        </div>
+                    </a>
+
+                </div>
+                
+                <div class="xl:h-full h-auto bg-[#274461] relative rounded-lg flex-1"
+                    v-if="selectedActivity && selectedActivity.id === '1'">
+                    <div class="p-3  rounded">
+                        <div class="text-3xl font-bold">Pulsar Setup
+                        </div>
+                        <div class="">Connecting my Github Account to Pulsar
+                        </div>
+                    </div>
+                    <div class="p-3 flex justify-between flex-col xl:flex-row">
+                        <div class="flex gap-2 flex-col xl:flex-row">
+                            <button class="flex gap-2 rounded-lg bg-yellow-600 p-2 items-center" @click="requestForHelp"
+                                :disabled="helpLoading" v-if="isActivityNotHelp(1) || !userActivities">
+                                <Icon v-if="!helpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!helpLoading">Request for Help</div>
+                                <div v-else>Requesting...</div>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-orange-600 p-2 items-center"
+                                @click="cancelRequestForHelp" :disabled="cancelHelpLoading" v-else>
+                                <Icon v-if="!cancelHelpLoading" icon="mdi:help-outline" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!cancelHelpLoading">Cancel Request</div>
+                                <div v-else>Cancelling...</div>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-emerald-500 p-2 items-center" @click="markAsDone"
+                                :disabled="loading" v-if="isActivityNotDone(1) || !userActivities">
+                                <Icon v-if="!loading" icon="iconamoon:check-bold" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!loading">Mark as Done</div>
+                                <div v-else>Marking...</div>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-red-500 p-2 items-center" @click="unmarkAsDone"
+                                :disabled="unmarkLoading" v-else>
+                                <Icon v-if="!unmarkLoading" icon="material-symbols:undo" height="20" />
+                                <Icon v-else icon="eos-icons:loading" height="20" class="animate-spin" />
+                                <div v-if="!unmarkLoading">Unmark as Done</div>
+                                <div v-else>Unmarking...</div>
+                            </button>
+
+
+                        </div>
+                        <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
+                            <button class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full hidden"
+                                @click="downloadFile4">
+
+                                <Icon icon="material-symbols:download-sharp" height="20" />
+                                <div>Download guide</div>
+                            </button>
+                            <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full xl:hidden"
+                                @click="downloadFile4">
+                                <Icon icon="material-symbols:download-sharp" height="20" />
+                                <div>Download guide</div>
+                            </button>
+
+                            <button @click="previewPulsar = !previewPulsar"
+                                class=" gap-2 rounded-lg border-2 border-blue-500  text-blue-500 p-2 items-center xl:flex hidden">
+                                <Icon icon="lets-icons:view-fill" height="20" />
+                                <div>Preview </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-3  h-[55vh] xl:block hidden rounded-rounded">
+                        <iframe src="/pulsar.pdf" width="100%" height="100%" class="rounded"
+                            v-if="previewPulsar"></iframe>
+                    </div>
+
                 </div>
                 <div class="xl:h-full h-auto bg-[#274461] relative rounded-lg flex-1"
                     v-if="selectedActivity && selectedActivity.id === '1'">
@@ -535,6 +629,7 @@ onBeforeUnmount(() => {
 
 
                         </div>
+                        
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
                             <!-- <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
                                 <a href="/src/assets/files/pulsar.pdf" download="pulsar-guide.pdf"
@@ -593,6 +688,28 @@ onBeforeUnmount(() => {
                                     <button
                                         class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden"
                                         @click="downloadFile2">
+                                        <Icon icon="material-symbols:download-sharp" height="20" />
+                                        <div>Download Sample</div>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex w-full border-white rounded-lg border-2 p-2 gap-2">
+                                    <div class="text-xl  p-3 hover:bg- rounded-lg w-full">
+                                        Sample
+                                        3
+                                    </div>
+                                    <button
+                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center hidden">
+                                        <a href="https://lyyyyy23.github.io/clean/" target="_blank"
+                                            class="flex gap-2 items-center text-white">
+                                            <Icon icon="material-symbols:download-sharp" height="20" />
+                                            <div>Visit Link</div>
+                                        </a>
+                                    </button>
+                                    <button
+                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden"
+                                        @click="downloadFile5">
                                         <Icon icon="material-symbols:download-sharp" height="20" />
                                         <div>Download Sample</div>
                                     </button>
@@ -674,6 +791,7 @@ onBeforeUnmount(() => {
                     Select an activity
                 </div>
             </div>
+            
         </div>
     </div>
 </template>
