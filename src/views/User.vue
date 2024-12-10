@@ -568,7 +568,7 @@ onBeforeUnmount(() => {
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
                             <!-- <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
                                 <a href="/src/assets/files/pulsar.pdf" download="pulsar-guide.pdf"
-                                    class="flex gap-2 items-center text-white">
+                                    class="flex gap-2 items-center text-white justify-center">
                                     <Icon icon="material-symbols:download-sharp" height="20" />
                                     <div>Download guide</div>
                                 </a>
@@ -581,7 +581,7 @@ onBeforeUnmount(() => {
                             </button> -->
                         </div>
                     </div>
-                    <div class="p-3  h-[55vh] xl:block hidden rounded-rounded">
+                    <div class="p-3  h-[55vh] xl:block  rounded-rounded">
                         <div class="font-bold text-2xl">Sample Outputs</div>
                         <div class="p-2 space-y-2 flex flex-col">
                             <div class="flex gap-2">
@@ -591,18 +591,18 @@ onBeforeUnmount(() => {
                                         1
                                     </div>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center hidden">
+                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center ">
                                         <a href="https://jkennethdomingo.github.io/DidYouLikeHerInTheMorning/"
-                                            target="_blank" class="flex gap-2 items-center text-white">
-                                            <Icon icon="material-symbols:download-sharp" height="20" />
-                                            <div>Visit Link</div>
+                                            target="_blank" class="flex gap-2 items-center text-white justify-center">
+                                            <Icon icon="mdi:jump" height="20" />
+                                            <div class="hidden xl:block">Visit Link</div>
                                         </a>
                                     </button>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden"
+                                        class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center "
                                         @click="downloadFile1">
                                         <Icon icon="material-symbols:download-sharp" height="20" />
-                                        <div>Download Sample</div>
+                                        <div class="xl:block hidden">Download Sample</div>
                                     </button>
                                 </div>
                             </div>
@@ -613,18 +613,18 @@ onBeforeUnmount(() => {
                                         2
                                     </div>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center hidden">
+                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center ">
                                         <a href="https://lyyyyy23.github.io/cardigan/" target="_blank"
-                                            class="flex gap-2 items-center text-white">
-                                            <Icon icon="material-symbols:download-sharp" height="20" />
-                                            <div>Visit Link</div>
+                                            class="flex gap-2 items-center text-white justify-center">
+                                            <Icon icon="mdi:jump" height="20" />
+                                            <div class="hidden xl:block">Visit Link</div>
                                         </a>
                                     </button>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden"
+                                        class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center "
                                         @click="downloadFile2">
                                         <Icon icon="material-symbols:download-sharp" height="20" />
-                                        <div>Download Sample</div>
+                                        <div class="xl:block hidden">Download Sample</div>
                                     </button>
                                 </div>
                             </div>
@@ -635,18 +635,18 @@ onBeforeUnmount(() => {
                                         3
                                     </div>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center hidden">
+                                        class="xl:flex gap-2 rounded-lg bg-emerald-500 p-2 items-center w-[30%] justify-center ">
                                         <a href="https://lyyyyy23.github.io/clean/" target="_blank"
-                                            class="flex gap-2 items-center text-white">
-                                            <Icon icon="material-symbols:download-sharp" height="20" />
-                                            <div>Visit Link</div>
+                                            class="flex gap-2 items-center text-white justify-center">
+                                            <Icon icon="mdi:jump" height="20" />
+                                            <div class="hidden xl:block">Visit Link</div>
                                         </a>
                                     </button>
                                     <button
-                                        class="xl:flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center hidden"
+                                        class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-[30%] justify-center "
                                         @click="downloadFile5">
                                         <Icon icon="material-symbols:download-sharp" height="20" />
-                                        <div>Download Sample</div>
+                                        <div class="xl:block hidden">Download Sample</div>
                                     </button>
                                 </div>
                             </div>
