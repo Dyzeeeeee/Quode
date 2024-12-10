@@ -439,7 +439,7 @@ onBeforeUnmount(() => {
                     <div class="text-2xl font-bold px-3 py-1">Quiz</div>
                     <div class="border-white border-2 border-opacity-40 rounded-lg p-3 space-y-2">
                         <div @click="selectedActivity = 'quiz'"
-                            :class="`bg-[#435b72] p-3 rounded flex justify-between cursor-pointer  ${selectedActivity === activity ? 'border-2 border-emerald-500 bg-[#648eb6]' : ''}`">
+                            :class="`bg-[#435b72] p-3 rounded flex justify-between cursor-pointer  ${selectedActivity === 'quiz' ? 'border-2 border-emerald-500 bg-[#648eb6]' : ''}`">
                             <div>
                                 <div class="text-lg font-medium">Madaling Quiz 1</div>
                                 <div class="text-sm">HTML and CSS quiz
@@ -720,13 +720,18 @@ onBeforeUnmount(() => {
                 <div class="xl:h-full h-auto bg-[#274461] relative rounded-lg flex-1"
                     v-else-if="selectedActivity === 'quiz'">
                     <div class="p-3  rounded">
-                        <div class="text-3xl font-bold">Github Deployment
+                        <div class="text-3xl font-bold">Madaling Quiz 1
                         </div>
-                        <div class="">Deploying my lyrics page into Github
+                        <div class="">HTML and CSS quiz
+                            MADALI LANG TO PRAMIS.
                         </div>
                     </div>
                     <div class="p-3 flex justify-between flex-col xl:flex-row">
-
+                        <div class="flex justify-center items-center h-full w-full">
+                            <a href="https://bit.ly/4ff3AQq" target="_blank" class="w-full">
+                                <button class="flex gap-2 rounded-lg bg-emerald-500 p-2 items-center justify-center w-full xl:hidden">Take Quiz</button>
+                            </a>
+                        </div>
                     </div>
                     <div class="p-3  h-[55vh] xl:block hidden rounded">
                         <div class="flex justify-center items-center h-full">
