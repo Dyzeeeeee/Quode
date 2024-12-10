@@ -438,7 +438,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="text-2xl font-bold px-3 py-1">Quiz</div>
                     <div class="border-white border-2 border-opacity-40 rounded-lg p-3 space-y-2">
-                        <div  @click="selectedActivity = 'quiz'"
+                        <div @click="selectedActivity = 'quiz'"
                             :class="`bg-[#435b72] p-3 rounded flex justify-between cursor-pointer  ${selectedActivity === activity ? 'border-2 border-emerald-500 bg-[#648eb6]' : ''}`">
                             <div>
                                 <div class="text-lg font-medium">Madaling Quiz 1</div>
@@ -730,7 +730,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="p-3  h-[55vh] xl:block hidden rounded">
                         <div class="flex justify-center items-center h-full">
-                            <a href="https://bit.ly/4ff3AQq">
+                            <a href="https://bit.ly/4ff3AQq" target="_blank">
                                 <button class="bg-emerald-500 p-2 px-8 rounded-lg text-2xl">Take Quiz</button>
                             </a>
                         </div>
