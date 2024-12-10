@@ -729,14 +729,21 @@ onBeforeUnmount(() => {
                     <div class="p-3 flex justify-between flex-col xl:flex-row">
                         <div class="flex justify-center items-center h-full w-full">
                             <a href="https://bit.ly/4ff3AQq" target="_blank" class="w-full">
-                                <button class="flex gap-2 rounded-lg bg-emerald-500 p-2 items-center justify-center w-full xl:hidden">Take Quiz</button>
+                                <button
+                                    class="bg-emerald-500 p-2 px-8 rounded-lg w-full justify-center flex gap-2 items-center xl:hidden">
+                                    <Icon icon="healthicons:i-exam-qualification" />
+                                    Take Quiz
+                                </button>
                             </a>
                         </div>
                     </div>
                     <div class="p-3  h-[55vh] xl:block hidden rounded">
                         <div class="flex justify-center items-center h-full">
                             <a href="https://bit.ly/4ff3AQq" target="_blank">
-                                <button class="bg-emerald-500 p-2 px-8 rounded-lg text-2xl">Take Quiz</button>
+                                <button class="bg-emerald-500 p-2 px-8 rounded-lg text-2xl flex gap-2 items-center">
+                                    <Icon icon="healthicons:i-exam-qualification" />
+                                    Take Quiz
+                                </button>
                             </a>
                         </div>
                     </div>
