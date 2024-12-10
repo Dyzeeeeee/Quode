@@ -437,24 +437,26 @@ onBeforeUnmount(() => {
 
                     </div>
                     <div class="text-2xl font-bold px-3 py-1">Quiz</div>
-                    <a href="https://bit.ly/4ff3AQq">
-                    <div
-                            :class="`bg-[#435b72] p-3 rounded flex justify-between cursor-pointer  ${selectedActivity === activity ? 'border-2 border-emerald-500 bg-[#648eb6]' : ''}`"
-                            >
-                            <div>
-                                <div class="text-lg font-medium">Madaling Quiz 1</div>
-                                <div class="text-sm">HTML and CSS quiz
-                                    MADALI LANG TO PRAMIS.</div>
-                            </div>
-                            <!-- <div class="self-center">
+                    <div class="border-white border-2 border-opacity-40 rounded-lg p-3 space-y-2">
+
+                        <a href="https://bit.ly/4ff3AQq">
+                            <div
+                                :class="`bg-[#435b72] p-3 rounded flex justify-between cursor-pointer  ${selectedActivity === activity ? 'border-2 border-emerald-500 bg-[#648eb6]' : ''}`">
+                                <div>
+                                    <div class="text-lg font-medium">Madaling Quiz 1</div>
+                                    <div class="text-sm">HTML and CSS quiz
+                                        MADALI LANG TO PRAMIS.</div>
+                                </div>
+                                <!-- <div class="self-center">
                                 <img :src="activity.imageUrl" alt=""
                                     class="rounded-full h-12 w-12 bg-white border-[${activity.borderColor}] border-2">
                             </div> -->
-                        </div>
-                    </a>
+                            </div>
+                        </a>
+                    </div>
 
                 </div>
-                
+
                 <div class="xl:h-full h-auto bg-[#274461] relative rounded-lg flex-1"
                     v-if="selectedActivity && selectedActivity.id === '1'">
                     <div class="p-3  rounded">
@@ -629,7 +631,7 @@ onBeforeUnmount(() => {
 
 
                         </div>
-                        
+
                         <div class="flex gap-2 flex-col xl:flex-row mt-2 xl:mt-0">
                             <!-- <button class="flex gap-2 rounded-lg bg-blue-500 p-2 items-center w-full">
                                 <a href="/src/assets/files/pulsar.pdf" download="pulsar-guide.pdf"
@@ -791,7 +793,7 @@ onBeforeUnmount(() => {
                     Select an activity
                 </div>
             </div>
-            
+
         </div>
     </div>
 </template>
