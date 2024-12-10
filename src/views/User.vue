@@ -339,9 +339,9 @@ const handleLeave = async () => {
 
         // Call the logout API
         await apiServices.logout(data);
+        router.push('/');
 
         // Redirect to the initial route
-        router.push('/');
     } catch (error) {
         console.error('Error during logout:', error);
     }
