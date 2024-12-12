@@ -16,12 +16,24 @@ const showInactiveStudents = ref(true);
 
 const isModalOpen = ref(false);
 const LearnModal = ref(false);
+const tableModal = ref(false);
+const sampleModal = ref(false);
+const FtableModal = ref(false);
+const isFullScreen = ref(false);
 const settings = ref({
     hawking: false,
     mendeleev: false,
     faraday: false,
     pascal: false,
 });
+const openFullScreenImage = () => {
+    isFullScreen.value = true;
+};
+
+// Close the full-screen image modal
+const closeFullScreenImage = () => {
+    isFullScreen.value = false;
+};
 const sectionName = ref('');
 const userId = ref(null)
 const spinIcon = ref(false);
@@ -174,7 +186,8 @@ const handleLeave = async () => {
 
 
 const openSettings = async () => {
-    LearnModal.value = true;
+    // LearnModal.value = true;
+    tableModal.value = true;
     // isModalOpen.value = true;
 }
 
@@ -237,7 +250,7 @@ const awardPoint = async (id) => {
     try {
         // Call the API service to award the score
         const response = await apiServices.awardScore(data);
-            alert("Point awarded successfully.");
+        alert("Point awarded successfully.");
     } catch (error) {
         // Handle unexpected errors
         console.error("Error awarding point:", error);
@@ -610,6 +623,104 @@ onMounted(() => {
             </button>
         </div>
     </div>
+
+    <div v-if="tableModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div
+            class="bg-gradient-to-r from-[#243b55] to-[#274461] shadow-lg rounded-lg p-6 w-[90%] max-w-md text-white relative">
+            <!-- Modal Title -->
+            <div class="text-center text-2xl font-extrabold mb-4">
+                Anova
+            </div>
+            <!-- Download File Button -->
+            <button @click="sampleModal = true"
+                class="w-full mt-4 bg-[#10b981] text-white font-semibold px-4 py-3 rounded-md hover:bg-[#0aa96d] transition ease-in-out duration-300 shadow-sm">
+                View Example
+            </button>
+            <!-- Start Learning Button -->
+            <button @click="FtableModal = true"
+                class="w-full mt-4 bg-[#3b82f6] text-white font-semibold px-4 py-3 rounded-md hover:bg-[#2563eb] transition ease-in-out duration-300 shadow-sm">
+                View F-Table
+            </button>
+            <!-- Close Button -->
+            <button
+                class="w-full mt-4 border-2 border-red-600 text-red-600 font-semibold px-4 py-3 rounded-md hover:bg-red-600 hover:text-white transition ease-in-out duration-300 shadow-sm"
+                @click="tableModal = false">
+                Close
+            </button>
+        </div>
+    </div>
+    <div v-if="FtableModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div
+            class="bg-gradient-to-r from-[#243b55] to-[#274461] shadow-lg rounded-lg p-6 w-[90%] max-w-md text-white relative">
+            <!-- Modal Title -->
+            <h2 class="text-xl font-bold mb-4">F-table for Significance Level 0.05</h2>
+
+            <!-- Image with click event to open in full-screen -->
+            <img src="@/assets/images/f.05.png" alt="F-table" class="cursor-pointer" @click="openFullScreenImage" />
+
+            <!-- Close Button -->
+            <button
+                class="w-full mt-4 border-2 border-red-600 text-red-600 font-semibold px-4 py-3 rounded-md hover:bg-red-600 hover:text-white transition ease-in-out duration-300 shadow-sm"
+                @click="FtableModal = false">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <div v-if="sampleModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div
+            class="bg-gradient-to-r from-[#243b55] to-[#274461] shadow-lg rounded-lg p-6 w-[90%] max-w-md text-white relative">
+            <!-- Modal Title -->
+            <h2 class="text-lg font-bold mb-4">"Do the levels of energy people feel in the morning differ depending on
+                whether they drink coffee, milk, or water?"</h2>
+
+            <!-- Data Table -->
+            <table class="min-w-full table-auto mb-4 text-left">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b text-lg">Drink</th>
+                        <th class="py-2 px-4 border-b text-lg">Energy Levels (1-10)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Coffee</td>
+                        <td class="py-2 px-4 border-b">9, 8, 7, 8, 9, 8, 7, 9, 8, 7</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Tea</td>
+                        <td class="py-2 px-4 border-b">6, 7, 5, 6, 7, 5, 6, 7, 5, 6</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Juice</td>
+                        <td class="py-2 px-4 border-b">4, 5, 3, 4, 5, 3, 4, 5, 3, 4</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <!-- Close Button -->
+            <button
+                class="w-full mt-4 border-2 border-red-600 text-red-600 font-semibold px-4 py-3 rounded-md hover:bg-red-600 hover:text-white transition ease-in-out duration-300 shadow-sm"
+                @click="sampleModal = false">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Fullscreen Image Modal -->
+    <div v-if="isFullScreen" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+        <div class="relative">
+            <img src="@/assets/images/f.05.png" alt="Full Screen Image" class="max-w-full max-h-full object-contain" />
+            <button class="absolute top-4 right-4 bg-red-600 bg-opacity-50 text-white p-2 rounded-full hover:bg-red-700"
+                @click="closeFullScreenImage">
+                X
+            </button>
+        </div>
+    </div>
+
+
 
 </template>
 

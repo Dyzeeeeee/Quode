@@ -323,7 +323,7 @@ const handleJoin = async () => {
                     life: 3000,
                 }); return
             }
-            router.push({ name: 'user', params: { id: selectedSectionId } });
+            router.push({ name: 'buzzer', params: { id: selectedSectionId } });
 
         }
 
