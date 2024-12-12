@@ -8,7 +8,9 @@
         <div
             class="p-8 rounded-lg shadow-lg w-full sm:w-full md:w-[60%] lg:w-[40%] relative bg-[#274461] bg-opacity-70">
             <div class="flex justify-center mb-5">
-                <img src="@/assets/images/QuodE.png" alt="App Logo" class="xl:h-32 h-24" />
+                <a href="https://jkennethdomingo.github.io/ANOVA/" target="_blank">
+                    <img src="@/assets/images/QuodE.png" alt="App Logo" class="xl:h-32 h-24" />
+                </a>
             </div>
             <div class="flex flex-col md:flex-row gap-3">
                 <div
